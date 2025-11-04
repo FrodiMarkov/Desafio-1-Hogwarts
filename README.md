@@ -1,14 +1,14 @@
 # 🧙‍♂️ Desafío 1 - Hogwarts 
 ---
 
-## ⚙️ Sprint 1
+# ⚙️ Sprint 1
 
-### 🧙 CRUD Dumbledore
+# 🧙 CRUD Dumbledore
 
-### 🎩 Sombrero Seleccionador
+# 🎩 Sombrero Seleccionador
 
-### 🗃️ Base de Datos
+# 🗃️ Base de Datos
 
-### 🔐 Login
+# 🔐 Login
 
 ---
