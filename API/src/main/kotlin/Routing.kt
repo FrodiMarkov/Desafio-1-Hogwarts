@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.rutas.rutas.adminDAO
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -14,5 +15,7 @@ fun Application.configureRouting() {
         }
         // Static plugin. Try to access `/static/index.html`
         staticResources("/static", "static")
+        adminDAO()
     }
+
 }
