@@ -1,10 +1,10 @@
 package com.example.DAO
 
-import com.example.model.Profesor
+import com.example.model.Usuario
 
 interface DumbledorDAO {
-    fun insertar(profesor: Profesor): Boolean
-    fun modificar(profesor: Profesor): Boolean
-    fun eliminar(id: Int): Boolean
-    fun listar(): List<Profesor>
+    fun insertar(usuario: Usuario): Boolean
+    fun modificar(usuario: Usuario): Boolean
+    fun eliminar(id: Int?): Boolean
+    fun listar(): List<Usuario>
 }
