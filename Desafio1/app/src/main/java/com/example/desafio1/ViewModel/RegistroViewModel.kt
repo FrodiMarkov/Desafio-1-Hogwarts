@@ -1,6 +1,6 @@
 package com.example.desafio1.ViewModel
 
-import Api.EncuestaNetwork.retrofit
+import Api.HowartsNetwork.retrofit
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.desafio1.model.Usuario

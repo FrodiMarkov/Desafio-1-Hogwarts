@@ -1,5 +1,6 @@
 package com.example.desafio1
 
+import Api.HowartsNetwork.retrofit
 import ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.desafio1.databinding.ActivityMainBinding
-import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -29,53 +28,9 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-
         }
 
-<<<<<<< .merge_file_9aZauL
-        binding.btRegistro.setOnClickListener {
-            val intent = Intent(this, RegistroActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        binding.btLogin.setOnClickListener {
-            val emailLogin = binding.etUser.text.toString()
-            val passwordLogin = binding.etPassw.text.toString()
-
-            lifecycleScope.launch {
-                try {
-                    val usuarios = retrofit.listarUsuariosConRoles()
-                    val usuario = usuarios.find { it.nombre == emailLogin && it.contrasena == passwordLogin }
-
-                    if (usuario != null) {
-                        when {
-                            usuario.roles.contains(1) -> {
-                                val intent = Intent(this@MainActivity, AlumnoActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                            usuario.roles.contains(4) -> {
-                                val intent = Intent(this@MainActivity, DumbledorActivity::class.java)
-                                intent.putExtra("usuario_id", usuario.id)
-                                startActivity(intent)
-                                finish()
-                            }
-                            usuario.roles.contains(2) -> {
-                                val intent = Intent(this@MainActivity, ProfesorActivity::class.java)
-                                intent.putExtra("usuario_id", usuario.id)
-                                startActivity(intent)
-                                finish()
-                            }
-                            else -> Toast.makeText(this@MainActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this@MainActivity, "Email o contraseña incorrectos", Toast.LENGTH_SHORT).show()
-                    }
-
-                } catch (e: Exception) {
-                    Toast.makeText(this@MainActivity, "Error en la conexión: ${e.message}", Toast.LENGTH_SHORT).show()
-=======
+        // Observadores
         viewModel.usuarioLogueado.observe(this) { usuario ->
             usuario?.let {
                 when {
@@ -87,7 +42,6 @@ class MainActivity : AppCompatActivity() {
                         putExtra("usuario_id", it.id)
                     })
                     else -> Toast.makeText(this, "Rol no reconocido", Toast.LENGTH_SHORT).show()
->>>>>>> .merge_file_JbRizc
                 }
                 finish()
             }
@@ -99,16 +53,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.btLogin.setOnClickListener {
-            val usuarioLogin = binding.etUser.text.toString()
-            val passwordLogin = binding.etPassw.text.toString()
-            viewModel.login(usuarioLogin, passwordLogin)
+        // Botón Registro
+        binding.btRegistro.setOnClickListener {
+            startActivity(Intent(this, RegistroActivity::class.java))
         }
 
+        // Botón Login
+        binding.btLogin.setOnClickListener {
+            val usuarioLogin = binding.etUser.text.toString().trim()
+            val passwordLogin = binding.etPassw.text.toString().trim()
+            if (usuarioLogin.isNotEmpty() && passwordLogin.isNotEmpty()) {
+                viewModel.login(usuarioLogin, passwordLogin)
+            } else {
+                Toast.makeText(this, "Ingresa email y contraseña", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Cargar GIF de fondo
         Glide.with(this)
-            //que poner para que sea un gif y no una imagen
             .asGif()
-            .load(R.drawable.background2)
+            .load(R.drawable.background2) // Asegúrate que sea un GIF
             .into(binding.IVBackground)
     }
 }

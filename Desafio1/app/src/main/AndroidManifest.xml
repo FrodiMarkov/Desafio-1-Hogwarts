@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1">
+
         <activity
-<<<<<<< HEAD
             android:name=".RegistroActivity"
-=======
+            android:exported="false" />
+        <activity
             android:name=".AdminActivity"
->>>>>>> feature/Dumbledor
             android:exported="false" />
         <activity
             android:name=".ProfesorActivity"
@@ -30,15 +30,17 @@
         <activity
             android:name=".AlumnoActivity"
             android:exported="false" />
+
+        <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
