@@ -2,12 +2,12 @@ package rutas.rutas
 
 import DAO.DumbledorDAO
 import DAO.dumbledorDAOImp
-import model.UsuarioConRoles
 import io.ktor.server.routing.Route
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.*
+import model.Usuario
 
 fun Route.dumbledorDAO(){
     val dumbledorDAO : DumbledorDAO = dumbledorDAOImp
@@ -17,18 +17,19 @@ fun Route.dumbledorDAO(){
         call.respond(HttpStatusCode.OK, usuarios)
     }
 
-    post("/usuarios") {
-        val usuario = call.receive<UsuarioConRoles>()
-        val ok = dumbledorDAO.insertar(usuario)
+    post("/usuario") {
+        val usuario = call.receive<Usuario>()
+        val usuarioId = dumbledorDAO.insertar(usuario)
 
-        if (ok) {
+        if (usuarioId != null) {
+            dumbledorDAO.asignarRol(usuarioId, 1) // 1 = alumno
             call.respond(HttpStatusCode.Created, "Usuario creado correctamente")
         } else {
             call.respond(HttpStatusCode.Conflict, "No se pudo crear el usuario")
         }
     }
 
-    delete("/usuarios/{id}") {
+    delete("/usuario/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
 
         val ok = dumbledorDAO.eliminar(id)

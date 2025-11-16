@@ -34,6 +34,12 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.btRegistro.setOnClickListener {
+            val intent = Intent(this, RegistroActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         binding.btLogin.setOnClickListener {
             val emailLogin = binding.etUser.text.toString()
             val passwordLogin = binding.etPassw.text.toString()

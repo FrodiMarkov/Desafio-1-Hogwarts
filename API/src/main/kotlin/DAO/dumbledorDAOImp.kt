@@ -1,35 +1,39 @@
 package DAO
 
 import Helpers.Database
+import model.Usuario
 import model.UsuarioConRoles
 
 object dumbledorDAOImp : DumbledorDAO{
-    override fun insertar(usuario: UsuarioConRoles): Boolean {
+    override fun insertar(usuario: Usuario): Int? {
         val sql = """
-        INSERT INTO usuario 
-        (nombre, email, contrasena, experiencia, id_casa, nivel) 
+        INSERT INTO usuario (nombre, email, contraseña, experiencia, nivel, id_casa)
         VALUES (?, ?, ?, ?, ?, ?)
     """.trimIndent()
 
-        val connection = Database.getConnection() ?: return false
+        val connection = Database.getConnection() ?: return null
 
         connection.use { conn ->
-            val stmt = conn.prepareStatement(sql)
+            val stmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)
             stmt.setString(1, usuario.nombre)
             stmt.setString(2, usuario.email)
             stmt.setString(3, usuario.contrasena)
             stmt.setInt(4, usuario.experiencia)
-            stmt.setInt(5, usuario.id_casa)
-            stmt.setInt(6, usuario.nivel)
+            stmt.setInt(5, usuario.nivel)
+            stmt.setInt(6, usuario.idCasa)
 
             return try {
-                stmt.executeUpdate() > 0
+                val affectedRows = stmt.executeUpdate()
+                if (affectedRows == 0) return null
+                val generatedKeys = stmt.generatedKeys
+                if (generatedKeys.next()) generatedKeys.getInt(1) else null
             } catch (e: Exception) {
-                e.printStackTrace()
-                false
+                e.printStackTrace() // Aquí puedes ver errores de constraint
+                null
             }
         }
     }
+
 
     override fun modificar(usuario: UsuarioConRoles): Boolean {
         val sql = """
@@ -66,6 +70,24 @@ object dumbledorDAOImp : DumbledorDAO{
         connection.use { conn ->
             val stmt = conn.prepareStatement(sql)
             stmt.setInt(1, id ?: return false)
+
+            return try {
+                stmt.executeUpdate() > 0
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
+    }
+
+    override fun asignarRol(usuarioId: Int?, rolId: Int?): Boolean {
+        val sql = "INSERT INTO roles_usuario (usuario_id, rol_id) VALUES (?, ?)"
+        val connection = Database.getConnection() ?: return false
+
+        connection.use { conn ->
+            val stmt = conn.prepareStatement(sql)
+            stmt.setInt(1, usuarioId ?: return false)
+            stmt.setInt(2, rolId ?: return false)
 
             return try {
                 stmt.executeUpdate() > 0
