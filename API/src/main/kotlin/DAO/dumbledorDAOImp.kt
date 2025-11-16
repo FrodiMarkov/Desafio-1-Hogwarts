@@ -99,4 +99,47 @@ object dumbledorDAOImp : DumbledorDAO{
         }
     }
 
+    fun listarUsuariosConRoles(): List<UsuarioConRoles> {
+        val sql = """
+        SELECT u.id, u.nombre, u.email, u.contrasena, u.experiencia, u.id_casa, u.nivel,
+               GROUP_CONCAT(r.rol_id) as roles
+        FROM usuarios u
+        JOIN roles_usuario r ON u.id = r.usuario_id
+        GROUP BY u.id
+    """.trimIndent()
+
+        val connection = Database.getConnection() ?: return emptyList()
+
+        connection.use { conn ->
+            try {
+                val stmt = conn.prepareStatement(sql)
+                val rs = stmt.executeQuery()
+
+                val lista = mutableListOf<UsuarioConRoles>() // usamos lista local para construir resultados
+
+                while (rs.next()) {
+                    val rolesString = rs.getString("roles") // ej: "1,2"
+                    val rolesList = rolesString.split(",").map { it.toInt() }
+
+                    val usuario = UsuarioConRoles(
+                        id = rs.getInt("id"),
+                        nombre = rs.getString("nombre"),
+                        email = rs.getString("email"),
+                        contrasena = rs.getString("contrasena"),
+                        experiencia = rs.getInt("experiencia"),
+                        id_casa = rs.getInt("id_casa"),
+                        nivel = rs.getInt("nivel"),
+                        roles = rolesList
+                    )
+
+                    lista.add(usuario)
+                }
+
+                return lista
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return emptyList()
+            }
+        }
+    }
 }

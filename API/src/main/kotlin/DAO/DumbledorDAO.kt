@@ -7,4 +7,5 @@ interface DumbledorDAO {
     fun modificar(usuario: Usuario): Boolean
     fun eliminar(id: Int?): Boolean
     fun listar(): List<Usuario>
+    fun listarUsuariosConRoles(): List<UsuarioConRoles>
 }
