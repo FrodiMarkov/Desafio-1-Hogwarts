@@ -1,6 +1,5 @@
 package com.example.desafio1
 
-import Api.HowartsNetwork.retrofit
 import ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +9,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
-//import necesario para glide
 import com.bumptech.glide.Glide
 import com.example.desafio1.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
