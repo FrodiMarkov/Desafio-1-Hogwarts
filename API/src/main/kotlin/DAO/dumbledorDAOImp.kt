@@ -1,35 +1,12 @@
-package com.example.DAO
+package DAO
 
 import Helpers.Database
-import com.example.model.Usuario
+import model.UsuarioConRoles
 
 object dumbledorDAOImp : DumbledorDAO{
-    override fun listar(): List<Usuario> {
-        val lista = mutableListOf<Usuario>()
-        val sql = "SELECT * FROM usuarios"
-        val connection = Database.getConnection() ?: return emptyList()
-
-        connection.use { conn ->
-            val stmt = conn.prepareStatement(sql)
-            val rs = stmt.executeQuery()
-            while (rs.next()) lista.add(
-                Usuario(
-                    id = rs.getInt("id"),
-                    nombre = rs.getString("nombre"),
-                    email = rs.getString("email"),
-                    contrasena = rs.getString("contrasena"),
-                    experiencia = rs.getInt("experiencia"),
-                    id_casa = rs.getInt("id_casa"),
-                    nivel = rs.getInt("nivel")
-                )
-            )
-        }
-
-        return lista
-    }
-    override fun insertar(usuario: Usuario): Boolean {
+    override fun insertar(usuario: UsuarioConRoles): Boolean {
         val sql = """
-        INSERT INTO usuarios 
+        INSERT INTO usuario 
         (nombre, email, contrasena, experiencia, id_casa, nivel) 
         VALUES (?, ?, ?, ?, ?, ?)
     """.trimIndent()
@@ -54,9 +31,9 @@ object dumbledorDAOImp : DumbledorDAO{
         }
     }
 
-    override fun modificar(usuario: Usuario): Boolean {
+    override fun modificar(usuario: UsuarioConRoles): Boolean {
         val sql = """
-        UPDATE usuarios 
+        UPDATE usuario 
         SET nombre = ?, email = ?, contrasena = ?, experiencia = ?, id_casa = ?, nivel = ? 
         WHERE id = ?
     """.trimIndent()
@@ -83,7 +60,7 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun eliminar(id: Int?): Boolean {
-        val sql = "DELETE FROM usuarios WHERE id = ?"
+        val sql = "DELETE FROM usuario WHERE id = ?"
         val connection = Database.getConnection() ?: return false
 
         connection.use { conn ->
@@ -95,6 +72,69 @@ object dumbledorDAOImp : DumbledorDAO{
             } catch (e: Exception) {
                 e.printStackTrace()
                 false
+            }
+        }
+    }
+
+    override fun listarUsuariosConRoles(): List<UsuarioConRoles> {
+        val sql = """
+        SELECT u.id, u.nombre, u.email, u.contraseña, u.experiencia, u.id_casa, u.nivel,
+               r.rol_id
+        FROM usuario u
+        LEFT JOIN roles_usuario r ON u.id = r.usuario_id
+        ORDER BY u.id
+    """.trimIndent()
+
+        val connection = Database.getConnection() ?: return emptyList()
+
+        connection.use { conn ->
+            try {
+                val stmt = conn.prepareStatement(sql)
+                val rs = stmt.executeQuery()
+
+                val listaUsuarios = mutableListOf<UsuarioConRoles>()
+                var currentUsuarioId = -1
+                var currentUsuario: UsuarioConRoles? = null
+                var rolesTemp = mutableListOf<Int>()
+
+                while (rs.next()) {
+                    val usuarioId = rs.getInt("id")
+
+                    if (usuarioId != currentUsuarioId) {
+                        if (currentUsuario != null) {
+                            currentUsuario.roles = rolesTemp
+                            listaUsuarios.add(currentUsuario)
+                        }
+
+                        currentUsuarioId = usuarioId
+                        rolesTemp = mutableListOf()
+                        currentUsuario = UsuarioConRoles(
+                            id = usuarioId,
+                            nombre = rs.getString("nombre"),
+                            email = rs.getString("email"),
+                            contrasena = rs.getString("contraseña"),
+                            experiencia = rs.getInt("experiencia"),
+                            id_casa = rs.getInt("id_casa"),
+                            nivel = rs.getInt("nivel"),
+                            roles = mutableListOf()
+                        )
+                    }
+
+                    val rolIdObj = rs.getObject("rol_id") as? Int
+                    if (rolIdObj != null) {
+                        rolesTemp.add(rolIdObj)
+                    }
+                }
+
+                if (currentUsuario != null) {
+                    currentUsuario.roles = rolesTemp
+                    listaUsuarios.add(currentUsuario)
+                }
+
+                return listaUsuarios
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return emptyList()
             }
         }
     }

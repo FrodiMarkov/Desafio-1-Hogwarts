@@ -1,8 +1,8 @@
-package com.example.rutas.rutas
+package rutas.rutas
 
-import com.example.DAO.DumbledorDAO
-import com.example.DAO.dumbledorDAOImp
-import com.example.model.Usuario
+import DAO.DumbledorDAO
+import DAO.dumbledorDAOImp
+import model.UsuarioConRoles
 import io.ktor.server.routing.Route
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
@@ -12,13 +12,13 @@ import io.ktor.server.routing.*
 fun Route.dumbledorDAO(){
     val dumbledorDAO : DumbledorDAO = dumbledorDAOImp
 
-    get("/usuarios") {
-        val usuarios = dumbledorDAO.listar()
+    get("/usuario") {
+        val usuarios = dumbledorDAO.listarUsuariosConRoles()
         call.respond(HttpStatusCode.OK, usuarios)
     }
 
     post("/usuarios") {
-        val usuario = call.receive<Usuario>()
+        val usuario = call.receive<UsuarioConRoles>()
         val ok = dumbledorDAO.insertar(usuario)
 
         if (ok) {

@@ -50,4 +50,22 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     //necesario para que funcione el glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Retrofit
+    //implementation(libs.retrofit)
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    //implementation(libs.converter.gson)
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+
+    // Coroutines
+    //implementation(libs.kotlinx.coroutines.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    //implementation(libs.kotlinx.coroutines.android)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+
+    // Lifecycle
+    //implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
+    //implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
 }
