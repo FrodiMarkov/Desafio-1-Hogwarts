@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <!-- FOTO / ICONO -->
         <ImageView
             android:id="@+id/imgUsuario"
             android:layout_width="64dp"
@@ -19,7 +18,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- NOMBRE -->
         <TextView
             android:id="@+id/tvNombre"
             android:layout_width="0dp"
@@ -31,7 +29,6 @@
             app:layout_constraintStart_toEndOf="@id/imgUsuario"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- EMAIL -->
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="0dp"
@@ -41,7 +38,6 @@
             app:layout_constraintStart_toStartOf="@id/tvNombre"
             app:layout_constraintTop_toBottomOf="@id/tvNombre" />
 
-        <!-- EXPERIENCIA -->
         <TextView
             android:id="@+id/tvExperiencia"
             android:layout_width="0dp"
@@ -51,7 +47,6 @@
             app:layout_constraintStart_toStartOf="@id/tvNombre"
             app:layout_constraintTop_toBottomOf="@id/tvEmail"/>
 
-        <!-- NIVEL -->
         <TextView
             android:id="@+id/tvNivel"
             android:layout_width="0dp"
@@ -61,7 +56,6 @@
             app:layout_constraintStart_toStartOf="@id/tvExperiencia"
             app:layout_constraintTop_toBottomOf="@id/tvExperiencia"/>
 
-        <!-- CASA -->
         <TextView
             android:id="@+id/tvCasa"
             android:layout_width="0dp"
@@ -71,9 +65,6 @@
             app:layout_constraintStart_toStartOf="@id/tvNivel"
             app:layout_constraintTop_toBottomOf="@id/tvNivel"/>
 
-        <!-- BOTÓN -->
-
-        <!-- DIVIDER -->
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
