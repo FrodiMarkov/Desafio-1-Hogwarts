@@ -1,6 +1,4 @@
-package com.example
-
-import com.example.rutas.rutas.dumbledorDAO
+import rutas.rutas.dumbledorDAO
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.response.*
