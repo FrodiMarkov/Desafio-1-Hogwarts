@@ -15,7 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1">
         <activity
+<<<<<<< HEAD
             android:name=".RegistroActivity"
+=======
+            android:name=".AdminActivity"
+>>>>>>> feature/Dumbledor
             android:exported="false" />
         <activity
             android:name=".ProfesorActivity"

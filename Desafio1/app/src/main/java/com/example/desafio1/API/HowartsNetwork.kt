@@ -5,7 +5,7 @@ import com.example.desafio1.API.usuariosAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object EncuestaNetwork {
+object HowartsNetwork {
     val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(Parametros.url + ":" + Parametros.puerto)
