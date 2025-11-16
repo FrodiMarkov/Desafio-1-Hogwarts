@@ -1,5 +1,3 @@
-package com.example
-
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -7,6 +5,11 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    configureSerialization()
-    configureRouting()
+    try {
+        configureSerialization()
+        configureRouting()
+    } catch (e: Exception) {
+        println("Error arrancando el servidor: ${e.message}")
+        e.printStackTrace()
+    }
 }

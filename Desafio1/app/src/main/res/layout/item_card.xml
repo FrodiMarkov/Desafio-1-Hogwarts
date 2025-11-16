@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- FOTO / ICONO -->
+        <ImageView
+            android:id="@+id/imgUsuario"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- NOMBRE -->
+        <TextView
+            android:id="@+id/tvNombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Nombre"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/imgUsuario"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- EMAIL -->
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvNombre"
+            app:layout_constraintTop_toBottomOf="@id/tvNombre" />
+
+        <!-- EXPERIENCIA -->
+        <TextView
+            android:id="@+id/tvExperiencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Experiencia: 0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvNombre"
+            app:layout_constraintTop_toBottomOf="@id/tvEmail"/>
+
+        <!-- NIVEL -->
+        <TextView
+            android:id="@+id/tvNivel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nivel: 0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvExperiencia"
+            app:layout_constraintTop_toBottomOf="@id/tvExperiencia"/>
+
+        <!-- CASA -->
+        <TextView
+            android:id="@+id/tvCasa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Casa: 0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvNivel"
+            app:layout_constraintTop_toBottomOf="@id/tvNivel"/>
+
+        <!-- BOTÓN -->
+
+        <!-- DIVIDER -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgUsuario" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
