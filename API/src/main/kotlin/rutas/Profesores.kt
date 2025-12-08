@@ -22,7 +22,7 @@ fun Route.dumbledorDAO(){
         call.respond(HttpStatusCode.OK, usuarios)
     }
 
-    // 🔥 NUEVO: Registro con preferencias y casa equilibrada
+    //registrar con algoritmo
     post("/usuario/registrar") {
         val req = call.receive<Registro>()
 
@@ -32,7 +32,6 @@ fun Route.dumbledorDAO(){
             return@post
         }
 
-        // Mapear preferencias
         val preferencias = mapOf(
             1 to req.prefGry,
             2 to req.prefSly,
@@ -42,7 +41,6 @@ fun Route.dumbledorDAO(){
 
         val idCasaElegida = seleccionarCasaEquilibrada(preferencias)
 
-        // Crear usuario final
         val usuario = Usuario(
             nombre = req.nombre,
             email = req.email,
@@ -66,7 +64,6 @@ fun Route.dumbledorDAO(){
         }
     }
 
-    // Crear usuario manualmente (no equilibrado)
     post("/usuario") {
         val usuario = call.receive<Usuario>()
         val usuarioId = dumbledorDAO.insertar(usuario)
@@ -79,7 +76,6 @@ fun Route.dumbledorDAO(){
         }
     }
 
-    // Eliminar usuario
     delete("/usuario/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
 
