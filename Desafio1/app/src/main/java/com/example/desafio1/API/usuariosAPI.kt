@@ -10,12 +10,11 @@ interface usuariosAPI {
     @GET("usuario")
     suspend fun listarUsuariosConRoles(): List<UsuarioConRoles>
 
-
     @POST("usuario/registrar")
     suspend fun registrarUsuario(@Body request: Registro): Response<Registro>
 
     @PUT("usuario/{id}")
-    suspend fun modificarUsuario(@Path("id") id: Int, @Body usuario: UsuarioConRoles): Boolean
+    suspend fun modificarUsuario(@Path("id") id: Int, @Body usuario: UsuarioConRoles): Response<Unit>
 
     @DELETE("usuario/{id}")
     suspend fun eliminarUsuario(@Path("id") id: Int): Boolean

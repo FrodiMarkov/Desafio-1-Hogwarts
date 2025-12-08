@@ -1,5 +1,6 @@
 package DAO
 
+import model.Asignatura
 import model.Usuario
 import model.UsuarioConRoles
 
@@ -10,4 +11,9 @@ interface DumbledorDAO {
     fun listarUsuariosConRoles(): List<UsuarioConRoles>
     fun asignarRol(usuarioId: Int?, rolId: Int?) : Boolean
     fun seleccionarCasaEquilibrada(preferencias: Map<Int, Int>): Int?
+    fun todasAsignaturas(): List<Asignatura>
+    fun asignaturaById(id: Int): Asignatura?
+    fun crearAsignatura(nombre: String): Int?
+    fun modificarAsignatura(id: Int, nombre: String): Boolean
+    fun borrarAsignatura(id: Int): Boolean
 }

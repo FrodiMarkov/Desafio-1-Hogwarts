@@ -1,6 +1,7 @@
 package DAO
 
 import Helpers.Database
+import model.Asignatura
 import model.Usuario
 import model.UsuarioConRoles
 import java.sql.Connection
@@ -62,7 +63,7 @@ object dumbledorDAOImp : DumbledorDAO{
 
 
     override fun modificar(usuario: UsuarioConRoles): Boolean {
-        val sql = "UPDATE usuario SET nombre = ?, email = ?, contrasena = ?, experiencia = ?, id_casa = ?, nivel = ? WHERE id = ?"
+        val sql = "UPDATE usuario SET nombre = ?, email = ?, contraseña = ?, experiencia = ?, id_casa = ?, nivel = ? WHERE id = ?"
 
         val connection = Database.getConnection() ?: return false
 
@@ -179,6 +180,81 @@ object dumbledorDAOImp : DumbledorDAO{
             } catch (e: Exception) {
                 e.printStackTrace()
                 return emptyList()
+            }
+        }
+    }
+
+    override fun todasAsignaturas(): List<Asignatura> {
+        val lista = mutableListOf<Asignatura>()
+        val sql = "SELECT * FROM asignaturas"
+
+        Database.getConnection().use { conn ->
+            conn.prepareStatement(sql).use { stmt ->
+                val rs = stmt.executeQuery()
+                while (rs.next()) {
+                    lista.add(
+                        Asignatura(
+                            id = rs.getInt("id"),
+                            nombre = rs.getString("nombre")
+                        )
+                    )
+                }
+            }
+        }
+        return lista
+    }
+
+    override fun asignaturaById(id: Int): Asignatura? {
+        val sql = "SELECT * FROM asignaturas WHERE id = ?"
+
+        Database.getConnection().use { conn ->
+            conn.prepareStatement(sql).use { stmt ->
+                stmt.setInt(1, id)
+                val rs = stmt.executeQuery()
+
+                return if (rs.next()) {
+                    Asignatura(
+                        id = rs.getInt("id"),
+                        nombre = rs.getString("nombre")
+                    )
+                } else null
+            }
+        }
+    }
+
+    override fun crearAsignatura(nombre: String): Int {
+        val sql = "INSERT INTO asignaturas (nombre) VALUES (?)"
+
+        Database.getConnection().use { conn ->
+            conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS).use { stmt ->
+                stmt.setString(1, nombre)
+                stmt.executeUpdate()
+
+                val keys = stmt.generatedKeys
+                return if (keys.next()) keys.getInt(1) else -1
+            }
+        }
+    }
+
+    override fun modificarAsignatura(id: Int, nombre: String): Boolean {
+        val sql = "UPDATE asignaturas SET nombre = ? WHERE id = ?"
+
+        Database.getConnection().use { conn ->
+            conn.prepareStatement(sql).use { stmt ->
+                stmt.setString(1, nombre)
+                stmt.setInt(2, id)
+                return stmt.executeUpdate() > 0
+            }
+        }
+    }
+
+    override fun borrarAsignatura(id: Int): Boolean {
+        val sql = "DELETE FROM asignaturas WHERE id = ?"
+
+        Database.getConnection().use { conn ->
+            conn.prepareStatement(sql).use { stmt ->
+                stmt.setInt(1, id)
+                return stmt.executeUpdate() > 0
             }
         }
     }
