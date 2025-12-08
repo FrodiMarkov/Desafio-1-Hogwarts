@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Observadores
         viewModel.usuarioLogueado.observe(this) { usuario ->
             usuario?.let {
                 when {

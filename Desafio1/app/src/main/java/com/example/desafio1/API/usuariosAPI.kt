@@ -1,5 +1,6 @@
 package com.example.desafio1.API
 
+import com.example.desafio1.model.Registro
 import com.example.desafio1.model.Usuario
 import com.example.model.UsuarioConRoles
 import retrofit2.Response
@@ -10,8 +11,8 @@ interface usuariosAPI {
     suspend fun listarUsuariosConRoles(): List<UsuarioConRoles>
 
 
-    @POST("usuario")
-    suspend fun insertarUsuario(@Body usuario: Usuario): Response<Unit>
+    @POST("usuario/registrar")
+    suspend fun registrarUsuario(@Body request: Registro): Response<Registro>
 
     @PUT("usuario/{id}")
     suspend fun modificarUsuario(@Path("id") id: Int, @Body usuario: UsuarioConRoles): Boolean

@@ -1,10 +1,12 @@
 package com.example.desafio1.ViewModel
 
 import Api.HowartsNetwork.retrofit
-import android.util.Log
 import androidx.lifecycle.*
+import com.example.desafio1.API.usuariosAPI
+import com.example.desafio1.model.Registro
 import com.example.desafio1.model.Usuario
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
 
 class RegistroViewModel : ViewModel() {
 
@@ -15,40 +17,17 @@ class RegistroViewModel : ViewModel() {
         nombre: String,
         email: String,
         contrasena: String,
-        prioridadG: Int,
-        prioridadS: Int,
-        prioridadR: Int,
-        prioridadH: Int
+        g: Int,
+        s: Int,
+        r: Int,
+        h: Int
     ) {
-        if (nombre.isBlank() || email.isBlank() || contrasena.isBlank()) {
-            _registroResult.value = false
-            return
-        }
-
-        val prioridades = listOf(prioridadG, prioridadS, prioridadR, prioridadH)
-        val max = prioridades.maxOrNull() ?: 1
-        val idCasa = when (max) {
-            prioridadG -> 1
-            prioridadS -> 2
-            prioridadR -> 3
-            else -> 4
-        }
-
-        val usuario = Usuario(
-            nombre = nombre,
-            email = email,
-            contrasena = contrasena,
-            idCasa = idCasa
-        )
-
         viewModelScope.launch {
             try {
-                val response = retrofit.insertarUsuario(usuario)
-                Log.d("RegistroViewModel", "HTTP code: ${response.code()}")
-
+                val request = Registro(nombre, email, contrasena, g, s, r, h)
+                val response = retrofit.registrarUsuario(request)
                 _registroResult.postValue(response.isSuccessful)
             } catch (e: Exception) {
-                Log.e("RegistroViewModel", "Error al insertar usuario", e)
                 _registroResult.postValue(false)
             }
         }

@@ -3,44 +3,66 @@ package DAO
 import Helpers.Database
 import model.Usuario
 import model.UsuarioConRoles
+import java.sql.Connection
+import java.sql.Statement
 
 object dumbledorDAOImp : DumbledorDAO{
-    override fun insertar(usuario: Usuario): Int? {
-        val sql = """
-        INSERT INTO usuario (nombre, email, contraseña, experiencia, nivel, id_casa)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """.trimIndent()
+    override fun seleccionarCasaEquilibrada(preferencias: Map<Int, Int>): Int {
+        val connection = Database.getConnection() ?: return 1
 
+        val casas = listOf(1, 2, 3, 4)
+        val casaCounts = mutableMapOf<Int, Int>()
+
+        val stmt = connection.prepareStatement(
+            "SELECT id_casa, COUNT(*) AS cantidad FROM usuario GROUP BY id_casa"
+        )
+        val rs = stmt.executeQuery()
+
+        while (rs.next()) {
+            casaCounts[rs.getInt("id_casa")] = rs.getInt("cantidad")
+        }
+
+        // Asegurar que todas las casas existan aunque no tengan alumnos
+        casas.forEach { casaCounts.putIfAbsent(it, 0) }
+
+        // Seleccionar casa equilibrada basada en:
+        // 1. casa con menos alumnos
+        // 2. mejor preferencia del usuario
+        val casaElegida = casas.sortedWith(
+            compareBy<Int> { casaCounts[it] }
+                .thenBy { preferencias[it] ?: 4 }
+        ).first()
+
+        return casaElegida
+    }
+
+    override fun insertar(usuario: Usuario): Int? {
         val connection = Database.getConnection() ?: return null
 
-        connection.use { conn ->
-            val stmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)
-            stmt.setString(1, usuario.nombre)
-            stmt.setString(2, usuario.email)
-            stmt.setString(3, usuario.contrasena)
-            stmt.setInt(4, usuario.experiencia)
-            stmt.setInt(5, usuario.nivel)
-            stmt.setInt(6, usuario.idCasa)
+        val sql = "INSERT INTO usuario (nombre, email, contraseña, id_casa, experiencia, nivel) VALUES (?, ?, ?, ?, ?, ?)"
 
-            return try {
-                val affectedRows = stmt.executeUpdate()
-                if (affectedRows == 0) return null
-                val generatedKeys = stmt.generatedKeys
-                if (generatedKeys.next()) generatedKeys.getInt(1) else null
-            } catch (e: Exception) {
-                e.printStackTrace() // Aquí puedes ver errores de constraint
-                null
+        // IMPORTANTE: solicitar keys generadas
+        val ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ps.setString(1, usuario.nombre)
+        ps.setString(2, usuario.email)
+        ps.setString(3, usuario.contrasena) // o usuario.password según tu modelo
+        ps.setInt(4, usuario.idCasa)
+        ps.setInt(5, 0)  // experiencia inicial
+        ps.setInt(6, 1)  // nivel inicial
+
+        val rows = ps.executeUpdate()
+        if (rows > 0) {
+            val rs = ps.generatedKeys
+            if (rs.next()) {
+                return rs.getInt(1)
             }
         }
+        return null
     }
 
 
     override fun modificar(usuario: UsuarioConRoles): Boolean {
-        val sql = """
-        UPDATE usuario 
-        SET nombre = ?, email = ?, contrasena = ?, experiencia = ?, id_casa = ?, nivel = ? 
-        WHERE id = ?
-    """.trimIndent()
+        val sql = "UPDATE usuario SET nombre = ?, email = ?, contrasena = ?, experiencia = ?, id_casa = ?, nivel = ? WHERE id = ?"
 
         val connection = Database.getConnection() ?: return false
 

@@ -9,4 +9,5 @@ interface DumbledorDAO {
     fun eliminar(id: Int?): Boolean
     fun listarUsuariosConRoles(): List<UsuarioConRoles>
     fun asignarRol(usuarioId: Int?, rolId: Int?) : Boolean
+    fun seleccionarCasaEquilibrada(preferencias: Map<Int, Int>): Int?
 }
