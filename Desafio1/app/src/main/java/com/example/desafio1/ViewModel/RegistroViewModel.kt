@@ -1,10 +1,8 @@
 package com.example.desafio1.ViewModel
 
-import Api.HowartsNetwork.retrofit
+import Api.HowartsNetwork.usuariosRetrofit
 import androidx.lifecycle.*
-import com.example.desafio1.API.usuariosAPI
 import com.example.desafio1.model.Registro
-import com.example.desafio1.model.Usuario
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
 
@@ -25,7 +23,7 @@ class RegistroViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val request = Registro(nombre, email, contrasena, g, s, r, h)
-                val response = retrofit.registrarUsuario(request)
+                val response = usuariosRetrofit.registrarUsuario(request)
                 _registroResult.postValue(response.isSuccessful)
             } catch (e: Exception) {
                 _registroResult.postValue(false)

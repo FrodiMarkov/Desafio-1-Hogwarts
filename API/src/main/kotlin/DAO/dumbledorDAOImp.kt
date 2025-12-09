@@ -4,7 +4,6 @@ import Helpers.Database
 import model.Asignatura
 import model.Usuario
 import model.UsuarioConRoles
-import java.sql.Connection
 import java.sql.Statement
 
 object dumbledorDAOImp : DumbledorDAO{
@@ -186,16 +185,22 @@ object dumbledorDAOImp : DumbledorDAO{
 
     override fun todasAsignaturas(): List<Asignatura> {
         val lista = mutableListOf<Asignatura>()
-        val sql = "SELECT * FROM asignaturas"
+
+        // CONSULTA CORREGIDA: Cambia 'pa.id_asignatura' por 'pa.asignatura_id'
+        val sql = "SELECT a.id, a.nombre, pa.id_profesor FROM asignatura a LEFT JOIN profesor_asignatura pa ON a.id = pa.asignatura_id ORDER BY a.nombre"
 
         Database.getConnection().use { conn ->
             conn.prepareStatement(sql).use { stmt ->
                 val rs = stmt.executeQuery()
                 while (rs.next()) {
+                    val idProfesor = rs.getInt("id_profesor")
+                    val profesorId: Int = idProfesor
+
                     lista.add(
                         Asignatura(
                             id = rs.getInt("id"),
-                            nombre = rs.getString("nombre")
+                            nombre = rs.getString("nombre"),
+                            id_profesor = profesorId
                         )
                     )
                 }
@@ -205,7 +210,9 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun asignaturaById(id: Int): Asignatura? {
-        val sql = "SELECT * FROM asignaturas WHERE id = ?"
+
+        // CONSULTA CORREGIDA: Cambia 'pa.id_asignatura' por 'pa.asignatura_id'
+        val sql = "SELECT a.id, a.nombre, pa.id_profesor FROM asignatura a LEFT JOIN profesor_asignatura pa ON a.id = pa.asignatura_id WHERE a.id = ?"
 
         Database.getConnection().use { conn ->
             conn.prepareStatement(sql).use { stmt ->
@@ -213,9 +220,13 @@ object dumbledorDAOImp : DumbledorDAO{
                 val rs = stmt.executeQuery()
 
                 return if (rs.next()) {
+                    val idProfesor = rs.getInt("id_profesor")
+                    val profesorId: Int = idProfesor
+
                     Asignatura(
                         id = rs.getInt("id"),
-                        nombre = rs.getString("nombre")
+                        nombre = rs.getString("nombre"),
+                        id_profesor = profesorId
                     )
                 } else null
             }
@@ -223,7 +234,7 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun crearAsignatura(nombre: String): Int {
-        val sql = "INSERT INTO asignaturas (nombre) VALUES (?)"
+        val sql = "INSERT INTO asignatura (nombre) VALUES (?)"
 
         Database.getConnection().use { conn ->
             conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS).use { stmt ->
@@ -236,20 +247,58 @@ object dumbledorDAOImp : DumbledorDAO{
         }
     }
 
-    override fun modificarAsignatura(id: Int, nombre: String): Boolean {
-        val sql = "UPDATE asignaturas SET nombre = ? WHERE id = ?"
+    override fun modificarAsignatura(id: Int, nombre: String, idProfesor: Int): Boolean {
+        // 1. Sentencia para actualizar el nombre de la asignatura
+        val sqlUpdateAsignatura = "UPDATE asignatura SET nombre = ? WHERE id = ?"
+
+        val sqlInsertProfesor = "INSERT INTO profesor_asignatura (asignatura_id, id_profesor) VALUES (?, ?)"
+
+        var filasAfectadas = 0
 
         Database.getConnection().use { conn ->
-            conn.prepareStatement(sql).use { stmt ->
-                stmt.setString(1, nombre)
-                stmt.setInt(2, id)
-                return stmt.executeUpdate() > 0
+            try {
+                // Iniciar Transacción
+                conn.autoCommit = false
+
+                // ==========================================================
+                // Paso A: Actualizar el nombre de la asignatura
+                // ==========================================================
+                conn.prepareStatement(sqlUpdateAsignatura).use { stmt ->
+                    stmt.setString(1, nombre)
+                    stmt.setInt(2, id)
+                    filasAfectadas += stmt.executeUpdate()
+                }
+
+                // ==========================================================
+                // Paso B: Actualizar la relación profesor_asignatura
+                // ==========================================================
+
+                // B2. Insertar el nuevo profesor principal
+                conn.prepareStatement(sqlInsertProfesor).use { stmt ->
+                    stmt.setInt(1, id)
+                    stmt.setInt(2, idProfesor)
+                    stmt.executeUpdate()
+                }
+
+                // Si ambos pasos fueron exitosos
+                conn.commit()
+
+            } catch (e: Exception) {
+                // Si algo falla, revertir los cambios
+                conn.rollback()
+                e.printStackTrace() // Imprimir el error para debug
+                return false
+            } finally {
+                // Asegurarse de restaurar autoCommit a true al salir de la transacción
+                conn.autoCommit = true
             }
         }
+
+        return filasAfectadas > 0 // Retornamos true si se modificó al menos la tabla 'asignatura'
     }
 
     override fun borrarAsignatura(id: Int): Boolean {
-        val sql = "DELETE FROM asignaturas WHERE id = ?"
+        val sql = "DELETE FROM asignatura WHERE id = ?"
 
         Database.getConnection().use { conn ->
             conn.prepareStatement(sql).use { stmt ->
@@ -258,5 +307,68 @@ object dumbledorDAOImp : DumbledorDAO{
             }
         }
     }
+    override fun crearAsignaturaCompleta(nombre: String, idProfesor: Int, idsAlumnos: List<Int>): Boolean {
+        // Sentencias SQL
+        val sqlInsertAsignatura = "INSERT INTO asignatura (nombre) VALUES (?)"
+        val sqlInsertProfesor = "INSERT INTO profesor_asignatura (asignatura_id, id_profesor) VALUES (?, ?)"
+        val sqlInsertAlumno = "INSERT INTO alumno_asignatura (id_asignatura, id_alumno) VALUES (?, ?)"
 
+        var asignaturaId: Int? = null
+
+        Database.getConnection().use { conn ->
+            try {
+                // Iniciar Transacción
+                conn.autoCommit = false
+
+                // ==========================================================
+                // Paso A: Insertar Asignatura y obtener el ID generado
+                // ==========================================================
+                conn.prepareStatement(sqlInsertAsignatura, java.sql.Statement.RETURN_GENERATED_KEYS).use { stmt ->
+                    stmt.setString(1, nombre)
+                    stmt.executeUpdate()
+
+                    // Obtener el ID de la asignatura recién creada
+                    val rs = stmt.generatedKeys
+                    if (rs.next()) {
+                        asignaturaId = rs.getInt(1)
+                    }
+                }
+
+                if (asignaturaId == null) throw Exception("No se pudo obtener el ID de la nueva asignatura.")
+
+                // ==========================================================
+                // Paso B: Asignar Profesor Principal
+                // ==========================================================
+                conn.prepareStatement(sqlInsertProfesor).use { stmt ->
+                    stmt.setInt(1, asignaturaId!!)
+                    stmt.setInt(2, idProfesor)
+                    stmt.executeUpdate()
+                }
+
+                // ==========================================================
+                // Paso C: Asignar Alumnos (Iteración y ejecución individual)
+                // ==========================================================
+                if (idsAlumnos.isNotEmpty()) {
+                    conn.prepareStatement(sqlInsertAlumno).use { stmt ->
+                        for (idAlumno in idsAlumnos) {
+                            stmt.setInt(1, asignaturaId!!)
+                            stmt.setInt(2, idAlumno)
+                            // Ejecutar la inserción inmediatamente dentro del bucle
+                            stmt.executeUpdate()
+                        }
+                    }
+                }
+
+                conn.commit()
+                return true
+
+            } catch (e: Exception) {
+                conn.rollback()
+                e.printStackTrace()
+                return false
+            } finally {
+                conn.autoCommit = true
+            }
+        }
+    }
 }

@@ -1,27 +1,26 @@
-package com.example.desafio1
+package com.example.desafio1.ViewModel
 
-import Api.HowartsNetwork.retrofit
+import Api.HowartsNetwork
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.desafio1.API.usuariosAPI
-import com.example.desafio1.model.Registro
 import com.example.model.UsuarioConRoles
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class FragmentoUsuariosViewModel : ViewModel() {
+
     private val _usuarios = MutableLiveData<List<UsuarioConRoles>>(emptyList())
     val usuarios: LiveData<List<UsuarioConRoles>> get() = _usuarios
 
     private val _mensajeError = MutableLiveData<String>()
     val mensajeError: LiveData<String> get() = _mensajeError
 
+    // Cargar lista desde API
     fun cargarUsuarios() {
         viewModelScope.launch {
             try {
-                val lista = retrofit.listarUsuariosConRoles()
+                val lista = HowartsNetwork.usuariosRetrofit.listarUsuariosConRoles()
                 _usuarios.value = lista
             } catch (e: Exception) {
                 _mensajeError.value = "Error al cargar usuarios: ${e.message}"
@@ -29,30 +28,15 @@ class FragmentoUsuariosViewModel : ViewModel() {
         }
     }
 
-    fun crearUsuario(registro: Registro) {
-        viewModelScope.launch {
-            try {
-                val response: Response<Registro> = retrofit.registrarUsuario(registro)
-                if (response.isSuccessful) {
-                    cargarUsuarios()
-                } else {
-                    _mensajeError.value = "Error al crear usuario: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _mensajeError.value = "Error al crear usuario: ${e.message}"
-            }
-        }
-    }
-
+    // Editar usuario
     fun editarUsuario(usuario: UsuarioConRoles) {
         viewModelScope.launch {
             try {
-                val response = retrofit.modificarUsuario(usuario.id, usuario)
+                val response = HowartsNetwork.usuariosRetrofit.modificarUsuario(usuario.id, usuario)
                 if (response.isSuccessful) {
                     cargarUsuarios()
-                    _mensajeError.value = "Se ha modificado el usuario con éxito"
                 } else {
-                    _mensajeError.value = "Error al editar usuario: ${response.code()}"
+                    _mensajeError.value = "Error al editar usuario: Código ${response.code()}"
                 }
             } catch (e: Exception) {
                 _mensajeError.value = "Error al editar usuario: ${e.message}"
@@ -60,10 +44,11 @@ class FragmentoUsuariosViewModel : ViewModel() {
         }
     }
 
+    // Eliminar usuario
     fun eliminarUsuario(id: Int) {
         viewModelScope.launch {
             try {
-                val exito: Boolean = retrofit.eliminarUsuario(id)
+                val exito = HowartsNetwork.usuariosRetrofit.eliminarUsuario(id)
                 if (exito) {
                     cargarUsuarios()
                 } else {
@@ -74,5 +59,4 @@ class FragmentoUsuariosViewModel : ViewModel() {
             }
         }
     }
-
 }

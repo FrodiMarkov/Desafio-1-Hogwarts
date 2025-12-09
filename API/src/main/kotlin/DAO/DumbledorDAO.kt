@@ -14,6 +14,7 @@ interface DumbledorDAO {
     fun todasAsignaturas(): List<Asignatura>
     fun asignaturaById(id: Int): Asignatura?
     fun crearAsignatura(nombre: String): Int?
-    fun modificarAsignatura(id: Int, nombre: String): Boolean
+    fun modificarAsignatura(id: Int, nuevoNombre: String, nuevoIdProfesor: Int): Boolean
     fun borrarAsignatura(id: Int): Boolean
+    fun crearAsignaturaCompleta(nombre: String, idProfesor: Int, idsAlumnos: List<Int>): Boolean
 }

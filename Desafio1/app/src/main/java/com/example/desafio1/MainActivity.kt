@@ -1,6 +1,5 @@
 package com.example.desafio1
 
-import Api.HowartsNetwork.retrofit
 import ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle

@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1">
         <activity
+            android:name=".CrearAsignaturaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CrearUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".ElegirRolActivity"
             android:exported="false" />
         <activity

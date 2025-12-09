@@ -8,7 +8,7 @@ import com.example.model.UsuarioConRoles
 import kotlinx.coroutines.launch
 
 class LoginViewModel() : ViewModel() {
-    private val retrofit = HowartsNetwork.retrofit
+    private val retrofit = HowartsNetwork.usuariosRetrofit
     val usuarioLogueado = MutableLiveData<UsuarioConRoles?>()
     val error = MutableLiveData<String?>()
 
