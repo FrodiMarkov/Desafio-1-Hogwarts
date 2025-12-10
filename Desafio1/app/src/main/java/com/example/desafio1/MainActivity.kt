@@ -1,6 +1,5 @@
 package com.example.desafio1
 
-import Api.HowartsNetwork.retrofit
 import ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle
@@ -32,19 +31,40 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.usuarioLogueado.observe(this) { usuario ->
             usuario?.let {
+                val roles = it.roles
+
                 when {
-                    it.roles.contains(1) -> startActivity(Intent(this, AlumnoActivity::class.java))
-                    it.roles.contains(4) -> startActivity(Intent(this, DumbledorActivity::class.java).apply {
-                        putExtra("usuario_id", it.id)
-                    })
-                    it.roles.contains(2) -> startActivity(Intent(this, ProfesorActivity::class.java).apply {
-                        putExtra("usuario_id", it.id)
-                    })
+                    roles.contains(4) -> {
+                        startActivity(Intent(this, DumbledorActivity::class.java).apply {
+                            putExtra("usuario_id", it.id)
+                        })
+                        finish()
+                    }
+                    roles.contains(1) -> {
+                        startActivity(Intent(this, AlumnoActivity::class.java))
+                        finish()
+                    }
+                    roles.contains(2) && roles.contains(3) -> {
+                        startActivity(Intent(this, ElegirRolActivity::class.java).apply {
+                            putExtra("usuario_id", it.id)
+                        })
+                        finish()
+                    }
+                    roles.contains(2) -> {
+                        startActivity(Intent(this, ProfesorActivity::class.java).apply {
+                            putExtra("usuario_id", it.id)
+                        })
+                        finish()
+                    }
+                    roles.contains(3) -> {
+                        startActivity(Intent(this, AdminActivity::class.java))
+                        finish()
+                    }
                     else -> Toast.makeText(this, "Rol no reconocido", Toast.LENGTH_SHORT).show()
                 }
-                finish()
             }
         }
+
 
         viewModel.error.observe(this) { mensaje ->
             mensaje?.let {

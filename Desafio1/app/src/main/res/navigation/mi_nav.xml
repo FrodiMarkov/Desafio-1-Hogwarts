@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mi_nav"
+    app:startDestination="@id/fragmentoEnBlanco2">
+    <fragment
+        android:id="@+id/fragmentoEnBlanco2"
+        android:name="com.example.desafio1.FragmentoEnBlanco"
+        android:label="fragment_enblanco"
+        tools:layout="@layout/fragment_enblanco" />
+    <fragment
+        android:id="@+id/fragmentoAsignatura"
+        android:name="com.example.desafio1.FragmentoAsignatura"
+        android:label="fragment_asignatura"
+        tools:layout="@layout/fragment_asignatura" />
+    <fragment
+        android:id="@+id/fragmentoUsuarios3"
+        android:name="com.example.desafio1.FragmentoUsuarios"
+        android:label="FragmentoUsuarios" />
+</navigation>

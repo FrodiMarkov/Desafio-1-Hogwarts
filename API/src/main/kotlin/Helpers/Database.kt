@@ -10,12 +10,7 @@ object Database {
     private val user = Parametros.usuario
     private val password = Parametros.passwd
 
-    fun getConnection(): Connection? {
-        return try {
-            DriverManager.getConnection(url, user, password)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            null
-        }
+    fun getConnection(): Connection {
+        return DriverManager.getConnection(url, user, password)
     }
 }

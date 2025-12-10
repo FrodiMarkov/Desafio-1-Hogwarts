@@ -11,6 +11,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.*
 import model.Registro
 import model.Usuario
+import model.UsuarioConRoles
 
 fun Route.dumbledorDAO(){
     val dumbledorDAO : DumbledorDAO = dumbledorDAOImp
@@ -86,4 +87,48 @@ fun Route.dumbledorDAO(){
             call.respond(HttpStatusCode.NotFound, "Usuario no encontrado")
         }
     }
+
+    put("/usuario/{id}") {
+        val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond(HttpStatusCode.BadRequest)
+        val usuario = call.receive<UsuarioConRoles>()
+        val exito = dumbledorDAO.modificar(usuario.copy(id = id))
+        call.respond(HttpStatusCode.OK, exito)
+    }
+
+    // Registrar usuario + roles directamente
+    post("/usuario/registrarConRoles") {
+        val usuarioConRoles = call.receive<UsuarioConRoles>()
+
+        val connection = Database.getConnection()
+        if (connection == null) {
+            call.respond(HttpStatusCode.InternalServerError, "Error conectando a la base de datos")
+            return@post
+        }
+
+        // Insertar usuario
+        val usuario = Usuario(
+            nombre = usuarioConRoles.nombre,
+            email = usuarioConRoles.email,
+            contrasena = usuarioConRoles.contrasena,
+            idCasa = usuarioConRoles.id_casa,
+            experiencia = usuarioConRoles.experiencia,
+            nivel = usuarioConRoles.nivel
+        )
+
+        val usuarioId = dumbledorDAO.insertar(usuario)
+
+        if (usuarioId != null) {
+            // Insertar cada rol
+            usuarioConRoles.roles.forEach { rolId ->
+                dumbledorDAO.asignarRol(usuarioId, rolId)
+            }
+
+            // Devolver usuario creado con roles
+            val nuevoUsuario = usuarioConRoles.copy(id = usuarioId)
+            call.respond(HttpStatusCode.Created, nuevoUsuario)
+        } else {
+            call.respond(HttpStatusCode.Conflict, "No se pudo crear el usuario")
+        }
+    }
+
 }
