@@ -14,6 +14,7 @@ fun Application.configureRouting() {
         staticResources("/static", "static")
         dumbledorDAO()
         asignaturas()
+        hechizo()
     }
 
 }

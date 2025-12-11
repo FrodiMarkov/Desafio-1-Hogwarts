@@ -15,6 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1">
         <activity
+            android:name=".NuevosHechizos"
+            android:exported="false" />
+        <activity
+            android:name=".ProfesorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfesorHechizos"
+            android:exported="false" />
+        <activity
             android:name=".CrearAsignaturaActivity"
             android:exported="false" />
         <activity
@@ -28,9 +37,6 @@
             android:exported="false" />
         <activity
             android:name=".AdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfesorActivity"
             android:exported="false" />
         <activity
             android:name=".DumbledorActivity"

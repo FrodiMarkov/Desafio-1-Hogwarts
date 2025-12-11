@@ -3,6 +3,7 @@ package com.example.desafio1
 import ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.desafio1.Holders.ProfesorHolder
+import com.example.desafio1.Holders.UsuarioHolder
 import com.example.desafio1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -35,31 +38,41 @@ class MainActivity : AppCompatActivity() {
 
                 when {
                     roles.contains(4) -> {
-                        startActivity(Intent(this, DumbledorActivity::class.java).apply {
-                            putExtra("usuario_id", it.id)
-                        })
+                        // Pasa el objeto completo al Holder
+                        UsuarioHolder.usuario = it
+
+                        startActivity(Intent(this, DumbledorActivity::class.java))
                         finish()
                     }
+                    // ----------------------------------------------------
+
                     roles.contains(1) -> {
                         startActivity(Intent(this, AlumnoActivity::class.java))
                         finish()
                     }
+                    // ----------------------------------------------------
+
                     roles.contains(2) && roles.contains(3) -> {
-                        startActivity(Intent(this, ElegirRolActivity::class.java).apply {
-                            putExtra("usuario_id", it.id)
-                        })
+                        UsuarioHolder.usuario = it
+
+                        // Inicia la Activity sin Intent.putExtra
+                        startActivity(Intent(this, ElegirRolActivity::class.java))
                         finish()
                     }
                     roles.contains(2) -> {
-                        startActivity(Intent(this, ProfesorActivity::class.java).apply {
-                            putExtra("usuario_id", it.id)
-                        })
+                        ProfesorHolder.profesor = it
+
+                        Log.d("Navegacion", "ProfesorHolder llenado con ID: ${ProfesorHolder.profesor?.id}")
+
+                        startActivity(Intent(this, ProfesorActivity::class.java))
                         finish()
                     }
+
                     roles.contains(3) -> {
                         startActivity(Intent(this, AdminActivity::class.java))
                         finish()
                     }
+
                     else -> Toast.makeText(this, "Rol no reconocido", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -72,12 +85,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Botón Registro
         binding.btRegistro.setOnClickListener {
             startActivity(Intent(this, RegistroActivity::class.java))
         }
 
-        // Botón Login
         binding.btLogin.setOnClickListener {
             val usuarioLogin = binding.etUser.text.toString().trim()
             val passwordLogin = binding.etPassw.text.toString().trim()

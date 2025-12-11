@@ -1,6 +1,6 @@
 package com.example.desafio1.ViewModel
 
-import Api.HowartsNetwork // Asumiendo que HowartsNetwork es donde se define Retrofit
+import Api.retrofit // Asumiendo que HowartsNetwork es donde se define Retrofit
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,10 +26,8 @@ class FragmentoAsignaturasViewModel : ViewModel() {
     fun cargarProfesores() {
         viewModelScope.launch {
             try {
-                // Asumimos que listarUsuariosConRoles trae a TODOS los usuarios con sus roles
-                val todosUsuarios = HowartsNetwork.usuariosRetrofit.listarUsuariosConRoles()
+                val todosUsuarios = retrofit.usuariosRetrofit.listarUsuariosConRoles()
 
-                // Filtramos la lista para obtener solo aquellos que tienen el ROL_PROFESOR (3)
                 val listaProfesores = todosUsuarios.filter {
                     it.roles.contains(ROL_PROFESOR)
                 }
@@ -40,12 +38,10 @@ class FragmentoAsignaturasViewModel : ViewModel() {
             }
         }
     }
-    // Cargar lista desde API (GET /asignaturas)
     fun cargarAsignaturas() {
         viewModelScope.launch {
             try {
-                // Asumiendo que HowartsNetwork.retrofit tiene un método listarAsignaturas()
-                val lista = HowartsNetwork.asignaturasRetrofit.listarAsignaturas()
+                val lista = retrofit.asignaturasRetrofit.listarAsignaturas()
                 _asignaturas.value = lista
             } catch (e: Exception) {
                 _mensajeError.value = "Error al cargar asignaturas: ${e.message}"
@@ -53,10 +49,8 @@ class FragmentoAsignaturasViewModel : ViewModel() {
         }
     }
 
-    // Editar asignatura (PUT /asignaturas/{id})
     fun editarAsignatura(asignatura: Asignatura) {
 
-        // 1. Verificar la validez del ID antes de la llamada (depuración)
         if (asignatura.id <= 0) {
             val mensaje = "Error: La asignatura no tiene un ID válido (${asignatura.id}) para editar."
             Log.e("EDIT_ASIGNATURA", mensaje)
@@ -64,13 +58,12 @@ class FragmentoAsignaturasViewModel : ViewModel() {
             return
         }
 
-        // 2. Mostrar la información que se va a enviar (depuración)
         Log.d("EDIT_ASIGNATURA", "Intentando PUT /asignatura/${asignatura.id}")
         Log.d("EDIT_ASIGNATURA", "Datos enviados: Nombre='${asignatura.nombre}', idProfesor='${asignatura.id_profesor}'")
 
         viewModelScope.launch {
             try {
-                val response = HowartsNetwork.asignaturasRetrofit.modificarAsignatura(asignatura.id, asignatura)
+                val response = retrofit.asignaturasRetrofit.modificarAsignatura(asignatura.id, asignatura)
 
                 if (response.isSuccessful) {
                     Log.i("EDIT_ASIGNATURA", "Modificación exitosa. Recargando lista.")
@@ -89,12 +82,11 @@ class FragmentoAsignaturasViewModel : ViewModel() {
         }
     }
 
-    // Eliminar asignatura (DELETE /asignaturas/{id})
     fun eliminarAsignatura(id: Int) {
         viewModelScope.launch {
             try {
                 // Asumiendo que HowartsNetwork.retrofit tiene un método eliminarAsignatura(id)
-                val exito = HowartsNetwork.asignaturasRetrofit.eliminarAsignatura(id)
+                val exito = retrofit.asignaturasRetrofit.eliminarAsignatura(id)
                 if (exito) {
                     cargarAsignaturas() // Recargar lista al tener éxito
                 } else {
