@@ -7,4 +7,64 @@
     android:layout_height="match_parent"
     tools:context=".AlumnoActivity">
 
+    <TextView
+        android:id="@+id/tvTituloAlumno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="MENÚ DE ALUMNO"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloAlumno"
+        app:layout_constraintVertical_bias="0.3">
+
+        <Button
+            android:id="@+id/btVerPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="VER MI PERFIL (Nombre, Casa, Nivel...)" />
+
+        <Button
+            android:id="@+id/btVerAsignaturas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="VER ASIGNATURAS" />
+
+        <Button
+            android:id="@+id/btVerRanking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="VER RANKING DE CASAS" />
+
+        <Button
+            android:id="@+id/btConfiguracionCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="CONFIGURACIÓN DE CUENTA (Contraseña y Foto)" />
+
+        <Button
+            android:id="@+id/btBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Volver / Cerrar Sesión" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

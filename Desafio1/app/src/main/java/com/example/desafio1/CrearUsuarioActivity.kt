@@ -1,6 +1,7 @@
 package com.example.desafio1
 
-import Api.HowartsNetwork.usuariosRetrofit
+import Api.retrofit.usuariosRetrofit
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ class CrearUsuarioActivity : AppCompatActivity() {
             val exp = binding.etExperiencia.text.toString().toIntOrNull() ?: 0
             val nivel = binding.etNivel.text.toString().toIntOrNull() ?: 0
             val casaNombre = binding.etCasa.text.toString().trim()
+            val contrasena = binding.etContrasena.text.toString()
             val casa: Int = when (casaNombre.lowercase()) {
                 "gryffindor" -> 1
                 "slytherin" -> 2
@@ -46,7 +48,7 @@ class CrearUsuarioActivity : AppCompatActivity() {
                 id = 0,
                 nombre = nombre,
                 email = email,
-                contrasena = "1234",
+                contrasena = contrasena,
                 experiencia = exp,
                 nivel = nivel,
                 id_casa = casa,
@@ -66,6 +68,9 @@ class CrearUsuarioActivity : AppCompatActivity() {
                     Toast.makeText(this@CrearUsuarioActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        binding.btnVolver2.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }

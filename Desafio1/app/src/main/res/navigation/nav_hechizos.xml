@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_hechizos"
+    app:startDestination="@id/fragmentoHechizos">
+
+    <fragment
+        android:id="@+id/fragmentoHechizos"
+        android:name="com.example.desafio1.FragmentoHechizos"
+        android:label="fragment_hechizos"
+        tools:layout="@layout/fragment_hechizos" />
+</navigation>

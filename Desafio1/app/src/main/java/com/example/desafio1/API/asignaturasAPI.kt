@@ -1,6 +1,7 @@
 package com.example.desafio1.API
 
 import com.example.desafio1.model.CreacionAsignatura
+import model.AlumnoAsignatura
 import model.Asignatura
 import retrofit2.Response
 import retrofit2.http.*
@@ -43,8 +44,10 @@ interface asignaturasAPI {
      * Corresponde al endpoint Ktor: GET /asignaturas/{id}
      */
     @GET("asignatura/{id}")
-    suspend fun asignaturaById(@Path("id") id: Int): Asignatura?
+    suspend fun asignaturaById(@Path("id") id: Int): Response<Asignatura>
 
     @POST("asignatura/completa") // Usamos una ruta específica para esta operación compleja
     suspend fun crearAsignaturaConProfesoresYAlumnos(@Body asignaturaData: CreacionAsignatura): Response<Unit>
+    @GET("alumno_asignatura/{id_alumno}")
+    suspend fun listarAlumnoAsignatura(@Path("id_alumno") idAlumno: Int?): Response<List<AlumnoAsignatura>>
 }

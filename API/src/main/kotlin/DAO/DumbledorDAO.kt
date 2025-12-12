@@ -1,5 +1,6 @@
 package DAO
 
+import model.AlumnoAsignatura
 import model.Asignatura
 import model.Usuario
 import model.UsuarioConRoles
@@ -17,4 +18,5 @@ interface DumbledorDAO {
     fun modificarAsignatura(id: Int, nuevoNombre: String, nuevoIdProfesor: Int): Boolean
     fun borrarAsignatura(id: Int): Boolean
     fun crearAsignaturaCompleta(nombre: String, idProfesor: Int, idsAlumnos: List<Int>): Boolean
+    fun listarAsignaturasAlumno(idAlumno: Int): List<AlumnoAsignatura>
 }

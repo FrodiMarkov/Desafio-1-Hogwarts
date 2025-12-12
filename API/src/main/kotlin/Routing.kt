@@ -4,6 +4,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import rutas.asignaturas
+import rutas.casasRoutes
 
 fun Application.configureRouting() {
     routing {
@@ -14,6 +15,8 @@ fun Application.configureRouting() {
         staticResources("/static", "static")
         dumbledorDAO()
         asignaturas()
+        hechizo()
+        casasRoutes()
     }
 
 }

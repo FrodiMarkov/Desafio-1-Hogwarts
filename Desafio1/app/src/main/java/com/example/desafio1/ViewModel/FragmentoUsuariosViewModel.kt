@@ -1,6 +1,7 @@
 package com.example.desafio1.ViewModel
 
-import Api.HowartsNetwork
+import Api.retrofit
+import Api.retrofit.usuariosRetrofit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,11 +17,10 @@ class FragmentoUsuariosViewModel : ViewModel() {
     private val _mensajeError = MutableLiveData<String>()
     val mensajeError: LiveData<String> get() = _mensajeError
 
-    // Cargar lista desde API
     fun cargarUsuarios() {
         viewModelScope.launch {
             try {
-                val lista = HowartsNetwork.usuariosRetrofit.listarUsuariosConRoles()
+                val lista = retrofit.usuariosRetrofit.listarUsuariosConRoles()
                 _usuarios.value = lista
             } catch (e: Exception) {
                 _mensajeError.value = "Error al cargar usuarios: ${e.message}"
@@ -28,15 +28,14 @@ class FragmentoUsuariosViewModel : ViewModel() {
         }
     }
 
-    // Editar usuario
     fun editarUsuario(usuario: UsuarioConRoles) {
         viewModelScope.launch {
             try {
-                val response = HowartsNetwork.usuariosRetrofit.modificarUsuario(usuario.id, usuario)
-                if (response.isSuccessful) {
+                val response = usuariosRetrofit.modificarUsuario(usuario.id, usuario)
+                if (response) {
                     cargarUsuarios()
                 } else {
-                    _mensajeError.value = "Error al editar usuario: Código ${response.code()}"
+                    _mensajeError.value = "Error al editar usuario"
                 }
             } catch (e: Exception) {
                 _mensajeError.value = "Error al editar usuario: ${e.message}"
@@ -44,11 +43,10 @@ class FragmentoUsuariosViewModel : ViewModel() {
         }
     }
 
-    // Eliminar usuario
     fun eliminarUsuario(id: Int) {
         viewModelScope.launch {
             try {
-                val exito = HowartsNetwork.usuariosRetrofit.eliminarUsuario(id)
+                val exito = usuariosRetrofit.eliminarUsuario(id)
                 if (exito) {
                     cargarUsuarios()
                 } else {

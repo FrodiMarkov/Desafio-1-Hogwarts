@@ -7,6 +7,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
+import io.ktor.server.application.log
 import model.Asignatura
 
 fun Route.asignaturas() {
@@ -62,9 +63,15 @@ fun Route.asignaturas() {
         val asignatura = call.receive<Asignatura>()
 
         // Suponiendo que el nuevo ID del profesor se recibe en asignatura.idProfesor
-        val nuevoIdProfesor = asignatura.id_profesor // Debes asegurarte de que este campo exista en el modelo transferido
+        val nuevoIdProfesor =
+            asignatura.id_profesor // Debes asegurarte de que este campo exista en el modelo transferido
 
-        if (idAsignatura != null && dumbledorDAO.modificarAsignatura(idAsignatura, asignatura.nombre, nuevoIdProfesor)) {
+        if (idAsignatura != null && dumbledorDAO.modificarAsignatura(
+                idAsignatura,
+                asignatura.nombre,
+                nuevoIdProfesor
+            )
+        ) {
             call.respond(HttpStatusCode.OK)
         } else {
             call.respond(HttpStatusCode.NotFound)
@@ -102,6 +109,29 @@ fun Route.asignaturas() {
             call.respond(HttpStatusCode.Created)
         } else {
             call.respond(HttpStatusCode.InternalServerError, "No se pudo crear la asignatura y sus relaciones.")
+        }
+    }
+    get("/alumno_asignatura/{id_alumno}") {
+        // 2. Extraer el ID del alumno de los parámetros de la ruta
+        val idAlumno = call.parameters["id_alumno"]?.toIntOrNull()
+
+        if (idAlumno == null) {
+            call.respond(HttpStatusCode.BadRequest, "El ID del alumno es inválido o falta.")
+            return@get
+        }
+
+        try {
+            // 3. Llamar al DAO con el ID específico
+            val relaciones = dumbledorDAO.listarAsignaturasAlumno(idAlumno)
+
+            // 4. Responder con la lista de relaciones (si está vacía, devuelve OK/200 con lista vacía)
+            call.respond(relaciones)
+        } catch (e: Exception) {
+            call.application.log.error("Error al obtener relaciones para el alumno $idAlumno: ${e.message}", e)
+            call.respond(
+                HttpStatusCode.InternalServerError,
+                "Error al obtener la lista de relaciones para el alumno."
+            )
         }
     }
 }

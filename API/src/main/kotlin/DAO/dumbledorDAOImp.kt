@@ -1,6 +1,7 @@
 package DAO
 
 import Helpers.Database
+import model.AlumnoAsignatura
 import model.Asignatura
 import model.Usuario
 import model.UsuarioConRoles
@@ -8,7 +9,7 @@ import java.sql.Statement
 
 object dumbledorDAOImp : DumbledorDAO{
     override fun seleccionarCasaEquilibrada(preferencias: Map<Int, Int>): Int {
-        val connection = Database.getConnection() ?: return 1
+        val connection = Database.getConnection()
 
         val casas = listOf(1, 2, 3, 4)
         val casaCounts = mutableMapOf<Int, Int>()
@@ -129,7 +130,7 @@ object dumbledorDAOImp : DumbledorDAO{
         ORDER BY u.id
     """.trimIndent()
 
-        val connection = Database.getConnection() ?: return emptyList()
+        val connection = Database.getConnection()
 
         connection.use { conn ->
             try {
@@ -370,5 +371,35 @@ object dumbledorDAOImp : DumbledorDAO{
                 conn.autoCommit = true
             }
         }
+    }
+
+    override fun listarAsignaturasAlumno(idAlumno: Int): List<AlumnoAsignatura> { // <-- ¡Cambiado! Acepta el ID
+
+        val conexion = Database.getConnection()
+        val alumnoAsignaturas = mutableListOf<AlumnoAsignatura>()
+
+        // 1. Consulta SQL: Ahora siempre tiene un WHERE id_alumno = ?
+        val sql = "SELECT id_asignatura, id_alumno FROM alumno_asignatura WHERE id_alumno = ?"
+
+        // 2. Usar PreparedStatement para seguridad y eficiencia
+        conexion.prepareStatement(sql).use { statement ->
+
+            // 3. Asignar el parámetro al placeholder (?)
+            statement.setInt(1, idAlumno)
+
+            // 4. Ejecutar la consulta
+            statement.executeQuery().use { rs ->
+
+                while (rs.next()) {
+                    val relacion = AlumnoAsignatura(
+                        id_asignatura = rs.getInt("id_asignatura"),
+                        id_alumno = rs.getInt("id_alumno")
+                    )
+                    alumnoAsignaturas.add(relacion)
+                }
+            }
+        }
+
+        return alumnoAsignaturas
     }
 }

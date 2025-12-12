@@ -1,6 +1,6 @@
 package com.example.desafio1.ViewModel
 
-import Api.HowartsNetwork.usuariosRetrofit
+import Api.retrofit.usuariosRetrofit
 import androidx.lifecycle.*
 import com.example.desafio1.model.Registro
 import kotlinx.coroutines.launch
