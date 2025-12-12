@@ -28,7 +28,6 @@ class ElegirRolViewModel(
 
                 val asignaturasFiltradas = listaCompleta.filter { it.id_profesor == profesorId }
 
-                // 3. Actualizar LiveData
                 _asignaturasDelProfesor.value = asignaturasFiltradas
 
             } catch (e: HttpException) {

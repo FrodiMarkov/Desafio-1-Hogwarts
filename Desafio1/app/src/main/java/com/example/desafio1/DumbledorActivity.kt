@@ -25,5 +25,8 @@ class DumbledorActivity : AppCompatActivity() {
         binding.btAdmin.setOnClickListener {
             startActivity(Intent(this, AdminActivity::class.java))
         }
+        binding.btVerPerfil.setOnClickListener {
+            startActivity(Intent(this, Perfil::class.java))
+        }
     }
 }
