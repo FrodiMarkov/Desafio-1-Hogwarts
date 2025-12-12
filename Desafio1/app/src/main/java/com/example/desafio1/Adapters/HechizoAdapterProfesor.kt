@@ -35,7 +35,7 @@ class HechizoAdapterProfesor() : RecyclerView.Adapter<HechizoAdapterProfesor.Hec
         holder.itemView.setOnClickListener {
             android.app.AlertDialog.Builder(context)
                 .setTitle("Editar Hechizo")
-                .setMessage("Has pulsado para editar: ${hechizo.nombre}. La edición real debe gestionarse con un Fragment/Dialog.")
+                .setMessage("Editar hechizo")
                 .setPositiveButton("OK") { dialog, _ ->
                     dialog.dismiss()
                 }

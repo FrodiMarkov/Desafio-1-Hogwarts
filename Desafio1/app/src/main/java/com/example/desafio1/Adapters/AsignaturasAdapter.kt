@@ -19,7 +19,6 @@ class AsignaturasAdapter(
 
     private var listaAsignaturas: List<Asignatura> = emptyList()
 
-    // 🚨 NUEVO: Propiedad para almacenar la lista de profesores
     private var profesoresList: List<UsuarioConRoles> = emptyList()
 
     class AsignaturaViewHolder(val binding: ItemCardAsignaturaBinding) :
@@ -36,10 +35,9 @@ class AsignaturasAdapter(
 
     // Método auxiliar para buscar el nombre del profesor por ID
     private fun getNombreProfesor(id: Int?): String {
-        return if (id == null || id == 0) { // Considerar 0 como no asignado si es el valor por defecto
+        return if (id == null || id == 0) {
             "No asignado"
         } else {
-            // Buscamos el profesor en la lista que tenemos
             profesoresList.find { it.id == id }?.nombre ?: "Profesor desconocido"
         }
     }
@@ -49,8 +47,8 @@ class AsignaturasAdapter(
 
         holder.binding.tvNombreAsignatura.text = asignatura.nombre
 
-        val nombreProfesor = getNombreProfesor(asignatura.id_profesor) // Asegúrate de que tu modelo usa idProfesor (camelCase)
-        holder.binding.tvNombreProfesor.text = "$nombreProfesor" // Asumo tvNombreProfesor existe y quieres ese formato
+        val nombreProfesor = getNombreProfesor(asignatura.id_profesor)
+        holder.binding.tvNombreProfesor.text = "$nombreProfesor"
 
 
         // CLICK NORMAL → Editar asignatura
