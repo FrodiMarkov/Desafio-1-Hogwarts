@@ -1,5 +1,6 @@
 package com.example.desafio1
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,13 @@ class ProfesorActivity : AppCompatActivity() {
         }
         binding.btBack.setOnClickListener {
             finish()
+        }
+        binding.btVerRanking.setOnClickListener {
+            val intent = Intent(this, RankingActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btVerPerfil.setOnClickListener {
+            startActivity(Intent(this, Perfil::class.java))
         }
     }
 }

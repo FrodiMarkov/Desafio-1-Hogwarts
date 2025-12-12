@@ -3,6 +3,7 @@ package com.example.desafio1
 import AlumnoViewModel
 import android.content.Intent
 import android.os.Bundle
+import android.service.notification.NotificationListenerService
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -64,6 +65,10 @@ class AlumnoActivity : AppCompatActivity() {
 
         binding.btVerAsignaturas.setOnClickListener {
             viewModel.cargarAsignaturas()
+        }
+        binding.btVerRanking.setOnClickListener {
+            val intent = Intent(this, RankingActivity::class.java)
+            startActivity(intent)
         }
     }
     private fun mostrarDialogoSeleccion(asignaturas: List<Asignatura>) {

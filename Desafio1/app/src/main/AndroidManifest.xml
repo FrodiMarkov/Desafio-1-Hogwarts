@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1">
         <activity
+            android:name=".RankingActivity"
+            android:exported="false" />
+        <activity
             android:name=".AlumnoHechizos"
             android:exported="false" />
         <activity

@@ -7,7 +7,7 @@ object casasDAOImp: casasDAO {
     override suspend fun datosCasas(): List<Casa> {
         val connection = Database.getConnection()
         val casas = mutableListOf<Casa>()
-        val sql = "SELECT id, direccion, num_dormitorios FROM casa"
+        val sql = "SELECT * FROM casa"
 
         connection.createStatement().use { statement ->
             statement.executeQuery(sql).use { resultSet ->

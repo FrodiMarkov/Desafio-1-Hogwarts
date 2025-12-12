@@ -28,5 +28,9 @@ class DumbledorActivity : AppCompatActivity() {
         binding.btVerPerfil.setOnClickListener {
             startActivity(Intent(this, Perfil::class.java))
         }
+        binding.btVerRanking.setOnClickListener {
+            val intent = Intent(this, RankingActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
