@@ -3,17 +3,15 @@ package com.example.desafio1
 import AlumnoViewModel
 import android.content.Intent
 import android.os.Bundle
-import android.service.notification.NotificationListenerService
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.desafio1.Holders.UsuarioHolder
 import com.example.desafio1.databinding.ActivityAlumnoBinding
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
-import model.Asignatura // Asegúrate de que este import es correcto
+import model.Asignatura
 
 class AlumnoActivity : AppCompatActivity() {
 
@@ -68,6 +66,10 @@ class AlumnoActivity : AppCompatActivity() {
         }
         binding.btVerRanking.setOnClickListener {
             val intent = Intent(this, RankingActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btBack.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }

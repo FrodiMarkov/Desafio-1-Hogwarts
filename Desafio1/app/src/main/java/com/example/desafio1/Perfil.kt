@@ -7,9 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.desafio1.Holders.UsuarioHolder // Importamos el Holder
-import com.example.model.UsuarioConRoles // Importamos el modelo de datos
-// Asume que tienes configurado View Binding para activity_perfil.xml
+import com.example.desafio1.Holders.UsuarioHolder
+import com.example.model.UsuarioConRoles
 import com.example.desafio1.databinding.ActivityPerfilBinding
 
 class Perfil : AppCompatActivity() {

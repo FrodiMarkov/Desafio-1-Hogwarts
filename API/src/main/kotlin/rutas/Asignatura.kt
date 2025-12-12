@@ -14,20 +14,15 @@ fun Route.asignaturas() {
 
     val dumbledorDAO: DumbledorDAO = dumbledorDAOImp
 
-    // 1. Intenta obtener la lista (lo que probablemente falla)
     get("/asignatura") {
-        // 1. Intenta obtener la lista (lo que probablemente falla)
         val listaAsignaturas = try {
             dumbledorDAO.todasAsignaturas()
         } catch (e: Exception) {
-            // Imprime el error real en la consola de Ktor
             println("ERROR AL OBTENER DATOS: ${e.message}")
             e.printStackTrace()
             call.respond(HttpStatusCode.InternalServerError, "Error en DAO o DB")
             return@get
         }
-
-        // 2. Si llegas aquí, el DAO funcionó. Ahora intenta serializar la respuesta.
         call.respond(listaAsignaturas)
     }
 
@@ -62,9 +57,8 @@ fun Route.asignaturas() {
         val idAsignatura = call.parameters["id"]?.toIntOrNull()
         val asignatura = call.receive<Asignatura>()
 
-        // Suponiendo que el nuevo ID del profesor se recibe en asignatura.idProfesor
         val nuevoIdProfesor =
-            asignatura.id_profesor // Debes asegurarte de que este campo exista en el modelo transferido
+            asignatura.id_profesor
 
         if (idAsignatura != null && dumbledorDAO.modificarAsignatura(
                 idAsignatura,
@@ -89,11 +83,9 @@ fun Route.asignaturas() {
     }
 
     post("/asignatura/completa") {
-        // 1. Recibir el DTO completo del cliente Android
         val asignaturaData = try {
             call.receive<CreacionAsignatura>()
         } catch (e: Exception) {
-            // En caso de error de deserialización (JSON mal formado)
             call.respond(HttpStatusCode.BadRequest, "Datos inválidos en el cuerpo de la solicitud.")
             return@post
         }
@@ -112,7 +104,6 @@ fun Route.asignaturas() {
         }
     }
     get("/alumno_asignatura/{id_alumno}") {
-        // 2. Extraer el ID del alumno de los parámetros de la ruta
         val idAlumno = call.parameters["id_alumno"]?.toIntOrNull()
 
         if (idAlumno == null) {
@@ -121,10 +112,8 @@ fun Route.asignaturas() {
         }
 
         try {
-            // 3. Llamar al DAO con el ID específico
             val relaciones = dumbledorDAO.listarAsignaturasAlumno(idAlumno)
 
-            // 4. Responder con la lista de relaciones (si está vacía, devuelve OK/200 con lista vacía)
             call.respond(relaciones)
         } catch (e: Exception) {
             call.application.log.error("Error al obtener relaciones para el alumno $idAlumno: ${e.message}", e)

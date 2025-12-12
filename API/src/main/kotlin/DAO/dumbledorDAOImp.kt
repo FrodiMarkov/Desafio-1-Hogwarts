@@ -7,15 +7,14 @@ import model.Usuario
 import model.UsuarioConRoles
 import java.sql.Statement
 
-object dumbledorDAOImp : DumbledorDAO{
+object dumbledorDAOImp : DumbledorDAO {
     override fun seleccionarCasaEquilibrada(preferencias: Map<Int, Int>): Int {
         val connection = Database.getConnection()
 
         val casas = listOf(1, 2, 3, 4)
         val casaCounts = mutableMapOf<Int, Int>()
 
-        val stmt = connection.prepareStatement(
-            "SELECT id_casa, COUNT(*) AS cantidad FROM usuario GROUP BY id_casa"
+        val stmt = connection.prepareStatement("SELECT id_casa, COUNT(*) AS cantidad FROM usuario GROUP BY id_casa"
         )
         val rs = stmt.executeQuery()
 
@@ -25,16 +24,13 @@ object dumbledorDAOImp : DumbledorDAO{
 
         casas.forEach { casaCounts.putIfAbsent(it, 0) }
 
-        val casaElegida = casas.sortedWith(
-            compareBy<Int> { casaCounts[it] }
-                .thenBy { preferencias[it] ?: 4 }
-        ).first()
+        val casaElegida = casas.sortedWith(compareBy<Int> { casaCounts[it] }.thenBy { preferencias[it] ?: 4 }).first()
 
         return casaElegida
     }
 
     override fun insertar(usuario: Usuario): Int? {
-        val connection = Database.getConnection() 
+        val connection = Database.getConnection()
 
         val sql = "INSERT INTO usuario (nombre, email, contraseña, id_casa, experiencia, nivel) VALUES (?, ?, ?, ?, ?, ?)"
 
@@ -58,7 +54,8 @@ object dumbledorDAOImp : DumbledorDAO{
 
 
     override fun modificar(usuario: UsuarioConRoles): Boolean {
-        val sql = "UPDATE usuario SET nombre = ?, email = ?, contraseña = ?, experiencia = ?, id_casa = ?, nivel = ? WHERE id = ?"
+        val sql =
+            "UPDATE usuario SET nombre = ?, email = ?, contraseña = ?, experiencia = ?, id_casa = ?, nivel = ? WHERE id = ?"
 
         val connection = Database.getConnection() ?: return false
 
@@ -117,13 +114,7 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun listarUsuariosConRoles(): List<UsuarioConRoles> {
-        val sql = """
-        SELECT u.id, u.nombre, u.email, u.contraseña, u.experiencia, u.id_casa, u.nivel,
-               r.rol_id
-        FROM usuario u
-        LEFT JOIN roles_usuario r ON u.id = r.usuario_id
-        ORDER BY u.id
-    """.trimIndent()
+        val sql = "SELECT u.id, u.nombre, u.email, u.contraseña, u.experiencia, u.id_casa, u.nivel, r.rol_id FROM usuario u LEFT JOIN roles_usuario r ON u.id = r.usuario_id ORDER BY u.id"
 
         val connection = Database.getConnection()
 
@@ -182,7 +173,6 @@ object dumbledorDAOImp : DumbledorDAO{
     override fun todasAsignaturas(): List<Asignatura> {
         val lista = mutableListOf<Asignatura>()
 
-        // CONSULTA CORREGIDA: Cambia 'pa.id_asignatura' por 'pa.asignatura_id'
         val sql = "SELECT a.id, a.nombre, pa.id_profesor FROM asignatura a LEFT JOIN profesor_asignatura pa ON a.id = pa.asignatura_id ORDER BY a.nombre"
 
         Database.getConnection().use { conn ->
@@ -207,7 +197,6 @@ object dumbledorDAOImp : DumbledorDAO{
 
     override fun asignaturaById(id: Int): Asignatura? {
 
-        // CONSULTA CORREGIDA: Cambia 'pa.id_asignatura' por 'pa.asignatura_id'
         val sql = "SELECT a.id, a.nombre, pa.id_profesor FROM asignatura a LEFT JOIN profesor_asignatura pa ON a.id = pa.asignatura_id WHERE a.id = ?"
 
         Database.getConnection().use { conn ->
@@ -252,44 +241,28 @@ object dumbledorDAOImp : DumbledorDAO{
 
         Database.getConnection().use { conn ->
             try {
-                // Iniciar Transacción
-                conn.autoCommit = false
 
-                // ==========================================================
-                // Paso A: Actualizar el nombre de la asignatura
-                // ==========================================================
                 conn.prepareStatement(sqlUpdateAsignatura).use { stmt ->
                     stmt.setString(1, nombre)
                     stmt.setInt(2, id)
                     filasAfectadas += stmt.executeUpdate()
                 }
-
-                // ==========================================================
-                // Paso B: Actualizar la relación profesor_asignatura
-                // ==========================================================
-
-                // B2. Insertar el nuevo profesor principal
                 conn.prepareStatement(sqlInsertProfesor).use { stmt ->
                     stmt.setInt(1, id)
                     stmt.setInt(2, idProfesor)
                     stmt.executeUpdate()
                 }
 
-                // Si ambos pasos fueron exitosos
                 conn.commit()
 
             } catch (e: Exception) {
-                // Si algo falla, revertir los cambios
                 conn.rollback()
-                e.printStackTrace() // Imprimir el error para debug
+                e.printStackTrace()
                 return false
-            } finally {
-                // Asegurarse de restaurar autoCommit a true al salir de la transacción
-                conn.autoCommit = true
             }
         }
 
-        return filasAfectadas > 0 // Retornamos true si se modificó al menos la tabla 'asignatura'
+        return filasAfectadas > 0
     }
 
     override fun borrarAsignatura(id: Int): Boolean {
@@ -302,8 +275,8 @@ object dumbledorDAOImp : DumbledorDAO{
             }
         }
     }
+
     override fun crearAsignaturaCompleta(nombre: String, idProfesor: Int, idsAlumnos: List<Int>): Boolean {
-        // Sentencias SQL
         val sqlInsertAsignatura = "INSERT INTO asignatura (nombre) VALUES (?)"
         val sqlInsertProfesor = "INSERT INTO profesor_asignatura (asignatura_id, id_profesor) VALUES (?, ?)"
         val sqlInsertAlumno = "INSERT INTO alumno_asignatura (id_asignatura, id_alumno) VALUES (?, ?)"
@@ -312,17 +285,12 @@ object dumbledorDAOImp : DumbledorDAO{
 
         Database.getConnection().use { conn ->
             try {
-                // Iniciar Transacción
                 conn.autoCommit = false
 
-                // ==========================================================
-                // Paso A: Insertar Asignatura y obtener el ID generado
-                // ==========================================================
-                conn.prepareStatement(sqlInsertAsignatura, java.sql.Statement.RETURN_GENERATED_KEYS).use { stmt ->
+                conn.prepareStatement(sqlInsertAsignatura, Statement.RETURN_GENERATED_KEYS).use { stmt ->
                     stmt.setString(1, nombre)
                     stmt.executeUpdate()
 
-                    // Obtener el ID de la asignatura recién creada
                     val rs = stmt.generatedKeys
                     if (rs.next()) {
                         asignaturaId = rs.getInt(1)
@@ -331,24 +299,17 @@ object dumbledorDAOImp : DumbledorDAO{
 
                 if (asignaturaId == null) throw Exception("No se pudo obtener el ID de la nueva asignatura.")
 
-                // ==========================================================
-                // Paso B: Asignar Profesor Principal
-                // ==========================================================
                 conn.prepareStatement(sqlInsertProfesor).use { stmt ->
                     stmt.setInt(1, asignaturaId!!)
                     stmt.setInt(2, idProfesor)
                     stmt.executeUpdate()
                 }
 
-                // ==========================================================
-                // Paso C: Asignar Alumnos (Iteración y ejecución individual)
-                // ==========================================================
                 if (idsAlumnos.isNotEmpty()) {
                     conn.prepareStatement(sqlInsertAlumno).use { stmt ->
                         for (idAlumno in idsAlumnos) {
                             stmt.setInt(1, asignaturaId!!)
                             stmt.setInt(2, idAlumno)
-                            // Ejecutar la inserción inmediatamente dentro del bucle
                             stmt.executeUpdate()
                         }
                     }
@@ -367,21 +328,17 @@ object dumbledorDAOImp : DumbledorDAO{
         }
     }
 
-    override fun listarAsignaturasAlumno(idAlumno: Int): List<AlumnoAsignatura> { // <-- ¡Cambiado! Acepta el ID
+    override fun listarAsignaturasAlumno(idAlumno: Int): List<AlumnoAsignatura> {
 
         val conexion = Database.getConnection()
         val alumnoAsignaturas = mutableListOf<AlumnoAsignatura>()
 
-        // 1. Consulta SQL: Ahora siempre tiene un WHERE id_alumno = ?
         val sql = "SELECT id_asignatura, id_alumno FROM alumno_asignatura WHERE id_alumno = ?"
 
-        // 2. Usar PreparedStatement para seguridad y eficiencia
         conexion.prepareStatement(sql).use { statement ->
 
-            // 3. Asignar el parámetro al placeholder (?)
             statement.setInt(1, idAlumno)
 
-            // 4. Ejecutar la consulta
             statement.executeQuery().use { rs ->
 
                 while (rs.next()) {

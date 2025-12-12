@@ -32,5 +32,9 @@ class DumbledorActivity : AppCompatActivity() {
             val intent = Intent(this, RankingActivity::class.java)
             startActivity(intent)
         }
+        binding.btBack.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

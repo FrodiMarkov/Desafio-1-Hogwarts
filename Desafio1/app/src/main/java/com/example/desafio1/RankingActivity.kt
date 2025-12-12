@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.desafio1.model.RankingViewModel
+import com.example.desafio1.ViewModel.RankingViewModel
 import com.example.desafio1.adapter.CasaAdapter
 import com.example.desafio1.databinding.ActivityRankingBinding
 

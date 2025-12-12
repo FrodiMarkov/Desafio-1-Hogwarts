@@ -8,12 +8,10 @@ import java.sql.Statement
 
 object hechizosDAOImp : HechizosDAO {
 
-    private val TABLE_NAME = "hechizos"
 
-    // --- CREATE ---
     override fun insertar(hechizo: Hechizo): Int? {
         val connection: Connection? = Database.getConnection()
-        val sql = "INSERT INTO $TABLE_NAME (nombre, descripcion, experiencia, url_icono) VALUES (?, ?, ?, ?)"
+        val sql = "INSERT INTO hechizos (nombre, descripcion, experiencia, url_icono) VALUES (?, ?, ?, ?)"
 
         return connection?.use { conn ->
             conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS).use { stmt ->
@@ -37,7 +35,7 @@ object hechizosDAOImp : HechizosDAO {
     override fun listarTodos(): List<Hechizo> {
         val connection: Connection? = Database.getConnection()
         val hechizos = mutableListOf<Hechizo>()
-        val sql = "SELECT * FROM $TABLE_NAME"
+        val sql = "SELECT * FROM hechizos"
 
         connection?.use { conn ->
             conn.createStatement().use { stmt ->
@@ -60,7 +58,7 @@ object hechizosDAOImp : HechizosDAO {
 
     override fun obtenerPorId(id: Int): Hechizo? {
         val connection: Connection? = Database.getConnection()
-        val sql = "SELECT * FROM $TABLE_NAME WHERE id = ?"
+        val sql = "SELECT * FROM hechizos WHERE id = ?"
 
         return connection?.use { conn ->
             conn.prepareStatement(sql).use { stmt ->
@@ -83,8 +81,7 @@ object hechizosDAOImp : HechizosDAO {
 
     override fun actualizar(hechizo: Hechizo): Boolean {
         val connection: Connection? = Database.getConnection()
-        // CONSULTA UPDATE EN UNA LÍNEA
-        val sql = "UPDATE $TABLE_NAME SET nombre = ?, descripcion = ?, experiencia = ?, url_icono = ? WHERE id = ?"
+        val sql = "UPDATE hechizos SET nombre = ?, descripcion = ?, experiencia = ?, url_icono = ? WHERE id = ?"
 
         return connection?.use { conn ->
             conn.prepareStatement(sql).use { stmt ->
@@ -99,10 +96,9 @@ object hechizosDAOImp : HechizosDAO {
         } ?: false
     }
 
-    // --- DELETE ---
     override fun eliminar(id: Int): Boolean {
         val connection: Connection? = Database.getConnection()
-        val sql = "DELETE FROM $TABLE_NAME WHERE id = ?"
+        val sql = "DELETE FROM hechizos WHERE id = ?"
 
         return connection?.use { conn ->
             conn.prepareStatement(sql).use { stmt ->

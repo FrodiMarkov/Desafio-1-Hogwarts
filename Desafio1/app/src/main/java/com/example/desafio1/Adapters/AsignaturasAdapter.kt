@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.desafio1.ViewModel.FragmentoAsignaturasViewModel
 import com.example.desafio1.FragmentoAsignatura
 import com.example.desafio1.databinding.ItemCardAsignaturaBinding
-import com.example.model.UsuarioConRoles // Necesario para la lista de profesores
+import com.example.model.UsuarioConRoles
 import model.Asignatura
 
 class AsignaturasAdapter(

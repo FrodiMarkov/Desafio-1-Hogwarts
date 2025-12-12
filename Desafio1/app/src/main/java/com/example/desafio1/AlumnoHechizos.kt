@@ -6,9 +6,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.desafio1.databinding.ActivityAlumnoHechizosBinding // Importar el binding
+import com.example.desafio1.databinding.ActivityAlumnoHechizosBinding
 
-// Nota: El archivo activity_alumno_hechizos.xml debe generar la clase ActivityAlumnoHechizosBinding
 
 class AlumnoHechizos : AppCompatActivity() {
 

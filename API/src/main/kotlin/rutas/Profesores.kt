@@ -17,13 +17,11 @@ fun Route.dumbledorDAO(){
     val dumbledorDAO : DumbledorDAO = dumbledorDAOImp
 
 
-    // Listar usuarios
     get("/usuario") {
         val usuarios = dumbledorDAO.listarUsuariosConRoles()
         call.respond(HttpStatusCode.OK, usuarios)
     }
 
-    //registrar con algoritmo
     post("/usuario/registrar") {
         val req = call.receive<Registro>()
 
@@ -95,7 +93,6 @@ fun Route.dumbledorDAO(){
         call.respond(HttpStatusCode.OK, exito)
     }
 
-    // Registrar usuario + roles directamente
     post("/usuario/registrarConRoles") {
         val usuarioConRoles = call.receive<UsuarioConRoles>()
 
@@ -105,7 +102,6 @@ fun Route.dumbledorDAO(){
             return@post
         }
 
-        // Insertar usuario
         val usuario = Usuario(
             nombre = usuarioConRoles.nombre,
             email = usuarioConRoles.email,
@@ -118,12 +114,10 @@ fun Route.dumbledorDAO(){
         val usuarioId = dumbledorDAO.insertar(usuario)
 
         if (usuarioId != null) {
-            // Insertar cada rol
             usuarioConRoles.roles.forEach { rolId ->
                 dumbledorDAO.asignarRol(usuarioId, rolId)
             }
 
-            // Devolver usuario creado con roles
             val nuevoUsuario = usuarioConRoles.copy(id = usuarioId)
             call.respond(HttpStatusCode.Created, nuevoUsuario)
         } else {

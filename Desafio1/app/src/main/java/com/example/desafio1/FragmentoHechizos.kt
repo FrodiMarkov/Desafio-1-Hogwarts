@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.desafio1.Adapter.HechizoAdapterProfesor // Asegúrate de que esta clase esté importada
+import com.example.desafio1.Adapter.HechizoAdapterProfesor
 import com.example.desafio1.ViewModel.FragmentoViewModelProfesorHechizos
 import com.example.desafio1.databinding.FragmentHechizosBinding
 

@@ -1,4 +1,4 @@
-package com.example.desafio1.model
+package com.example.desafio1.ViewModel
 
 import Api.retrofit
 import androidx.lifecycle.LiveData

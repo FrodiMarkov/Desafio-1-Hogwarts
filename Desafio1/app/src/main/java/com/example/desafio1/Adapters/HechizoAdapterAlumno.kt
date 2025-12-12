@@ -1,5 +1,3 @@
-// Archivo: com/example/desafio1/adapter/HechizoAdapterAlumno.kt
-
 package com.example.desafio1.adapter
 
 import android.content.Context
