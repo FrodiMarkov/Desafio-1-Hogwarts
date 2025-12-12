@@ -38,25 +38,21 @@ class MainActivity : AppCompatActivity() {
 
                 when {
                     roles.contains(4) -> {
-                        // Pasa el objeto completo al Holder
                         UsuarioHolder.usuario = it
 
                         startActivity(Intent(this, DumbledorActivity::class.java))
                         finish()
                     }
-                    // ----------------------------------------------------
 
                     roles.contains(1) -> {
                         startActivity(Intent(this, AlumnoActivity::class.java))
                         UsuarioHolder.usuario = it
                         finish()
                     }
-                    // ----------------------------------------------------
 
                     roles.contains(2) && roles.contains(3) -> {
                         UsuarioHolder.usuario = it
 
-                        // Inicia la Activity sin Intent.putExtra
                         startActivity(Intent(this, ElegirRolActivity::class.java))
                         finish()
                     }

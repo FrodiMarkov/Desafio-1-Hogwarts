@@ -13,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.desafio1.R
 import com.example.desafio1.model.Hechizo
 import com.example.desafio1.Holders.UsuarioHolder
-import com.example.model.UsuarioConRoles // Asume la existencia de la clase UsuarioConRoles
-
-// ACEPTA UNA FUNCIÓN CALLBACK para notificar al ViewModel
+import com.example.model.UsuarioConRoles
 class HechizoAdapterAlumno(
     private val onAprenderHechizo: (Hechizo, UsuarioConRoles) -> Unit
 ) : RecyclerView.Adapter<HechizoAdapterAlumno.HechizoViewHolder>() {
@@ -53,7 +51,6 @@ class HechizoAdapterAlumno(
                 val usuarioActual = UsuarioHolder.usuario
 
                 if (usuarioActual != null) {
-                    // DELEGA la acción de actualización al callback del ViewModel
                     onAprenderHechizo(hechizo, usuarioActual)
                 } else {
                     Toast.makeText(context, "Error: Usuario no logueado.", Toast.LENGTH_SHORT).show()
@@ -66,7 +63,6 @@ class HechizoAdapterAlumno(
         }
     }
 
-    // ... (Métodos onCreateViewHolder, onBindViewHolder, getItemCount y setHechizos sin cambios) ...
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HechizoViewHolder {
         val view = LayoutInflater.from(parent.context)

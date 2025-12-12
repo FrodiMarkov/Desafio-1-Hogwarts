@@ -80,10 +80,6 @@ class AsignaturasAdapter(
 
     override fun getItemCount(): Int = listaAsignaturas.size
 
-    /**
-     * 🚨 NUEVO: Método para actualizar tanto asignaturas como profesores.
-     * Este método debe ser llamado desde el Fragmento para pasar los datos.
-     */
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<Asignatura>, newProfesores: List<UsuarioConRoles>) {
         listaAsignaturas = newList
@@ -91,10 +87,6 @@ class AsignaturasAdapter(
         notifyDataSetChanged()
     }
 
-    /**
-     * Sobrecarga para mantener compatibilidad si solo se actualizan las asignaturas.
-     * En este caso, el nombre del profesor puede ser 'desconocido' si los profesores no se han cargado.
-     */
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<Asignatura>) {
         listaAsignaturas = newList

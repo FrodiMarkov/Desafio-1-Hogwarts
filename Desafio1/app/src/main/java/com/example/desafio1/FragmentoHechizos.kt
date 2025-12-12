@@ -18,9 +18,6 @@ class FragmentoHechizos : Fragment() {
     private lateinit var binding: FragmentHechizosBinding
     private lateinit var hechizoAdapter: HechizoAdapterProfesor
 
-    companion object {
-        fun newInstance() = FragmentoHechizos()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +34,7 @@ class FragmentoHechizos : Fragment() {
         hechizoAdapter = HechizoAdapterProfesor()
 
         // Configuración del RecyclerView
-        binding.rvListaHechizos.apply { // rvListaHechizos está definido en fragment_hechizos.xml
+        binding.rvListaHechizos.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = hechizoAdapter
         }
@@ -54,16 +51,9 @@ class FragmentoHechizos : Fragment() {
         }
     }
 
-    // *** SOLUCIÓN: FORZAR RECARGA AL REANUDAR ***
     override fun onResume() {
         super.onResume()
-        // Cuando la actividad/fragmento regresa a primer plano (después de añadir un hechizo)
-        // forzamos la recarga de los datos.
         viewModel.cargarHechizos()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Nota: Si usaras '_binding: FragmentHechizosBinding?' lo harías null aquí.
-    }
 }

@@ -36,7 +36,6 @@ class CrearAsignaturaActivity : AppCompatActivity() {
 
         cargarUsuarios()
 
-        // 3. Configurar el botón de guardar
         binding.btnGuardarAsignatura.setOnClickListener {
             guardarAsignatura()
         }
@@ -50,7 +49,6 @@ class CrearAsignaturaActivity : AppCompatActivity() {
                 listaProfesores = todosUsuarios.filter { it.roles.contains(ROL_PROFESOR) }
                 listaAlumnosBase = todosUsuarios.filter { it.roles.contains(ROL_ALUMNO) }
 
-                // Inicializar la lista mutable para el dropdown
                 alumnosDisponibles = listaAlumnosBase.toMutableList()
 
                 configurarSelectorProfesor()

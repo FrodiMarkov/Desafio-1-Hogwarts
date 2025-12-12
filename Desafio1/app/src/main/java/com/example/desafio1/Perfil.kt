@@ -53,12 +53,9 @@ class Perfil : AppCompatActivity() {
             tvExperiencia.text = "Experiencia: ${user.experiencia} XP"
             tvNivel.text = "Nivel: ${user.nivel}"
 
-            // Aquí iría la carga de la imagen (ej: con Glide o Coil)
-            // imgUsuario.load(user.urlFotoPerfil)
         }
     }
 
-    // Función auxiliar para traducir el ID de casa a nombre (simulación)
     private fun getHouseNameById(id: Int): String {
         return when (id) {
             1 -> "Gryffindor"

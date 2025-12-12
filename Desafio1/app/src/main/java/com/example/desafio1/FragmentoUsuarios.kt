@@ -32,28 +32,23 @@ class FragmentoUsuarios : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configurar RecyclerView y adapter
         adapter = UsuariosAdapter(viewModel, this)
         binding.rvUsuarios.layoutManager = LinearLayoutManager(requireContext())
         binding.rvUsuarios.adapter = adapter
 
 
-        // Observar lista de usuarios
         viewModel.usuarios.observe(viewLifecycleOwner) { lista ->
             adapter.updateData(lista)
         }
 
-        // Observar mensajes de error
         viewModel.mensajeError.observe(viewLifecycleOwner) { mensaje ->
             Toast.makeText(requireContext(), mensaje, Toast.LENGTH_LONG).show()
         }
 
-        // Cargar usuarios al iniciar
         viewModel.cargarUsuarios()
 
     }
 
-    // Dialogo para editar usuario
     fun mostrarDialogEditarUsuario(usuario: UsuarioConRoles) {
         val dialogBinding = DialogEditarUsuarioBinding.inflate(LayoutInflater.from(requireContext()))
 

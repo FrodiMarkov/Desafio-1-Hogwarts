@@ -24,7 +24,6 @@ class FragmentoHechizosAlumnoViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    // Nuevo LiveData para notificar el resultado de la actualización de EXP
     private val _usuarioUpdateResult = MutableLiveData<String>()
     val usuarioUpdateResult: LiveData<String> = _usuarioUpdateResult
 
@@ -48,11 +47,7 @@ class FragmentoHechizosAlumnoViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Lógica para calcular la nueva experiencia y actualizar el usuario en el servidor.
-     */
     fun aprenderHechizo(hechizo: Hechizo, usuarioActual: UsuarioConRoles) {
-        // Limpiar resultado anterior
         _usuarioUpdateResult.value = ""
 
         viewModelScope.launch {
@@ -68,14 +63,11 @@ class FragmentoHechizosAlumnoViewModel : ViewModel() {
                 }
 
 
-                // Crear una copia del usuario con la nueva experiencia
                 val usuarioActualizado = usuarioActual.copy(experiencia = nuevaExperiencia, nivel = nuevoNivel)
 
-                // Llamada a la API usando la función suspend de Retrofit
                 val exito = usuariosRetrofit.modificarUsuario(usuarioActualizado.id, usuarioActualizado)
 
                 if (exito) {
-                    // Actualizar el Holder global si la API confirma el éxito
                     UsuarioHolder.usuario = usuarioActualizado
                     _usuarioUpdateResult.value = "¡Hechizo ejecutado! Ganaste $expGanada EXP (Total: $nuevaExperiencia)."
                 } else {

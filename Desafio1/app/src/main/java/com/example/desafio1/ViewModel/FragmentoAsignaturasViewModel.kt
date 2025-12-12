@@ -18,7 +18,7 @@ class FragmentoAsignaturasViewModel : ViewModel() {
     private val _mensajeError = MutableLiveData<String>()
     val mensajeError: LiveData<String> get() = _mensajeError
 
-    private val ROL_PROFESOR = 3 // Define la constante para el rol de profesor
+    private val ROL_PROFESOR = 3
 
     private val _profesores = MutableLiveData<List<UsuarioConRoles>>(emptyList())
     val profesores: LiveData<List<UsuarioConRoles>> get() = _profesores
@@ -67,7 +67,7 @@ class FragmentoAsignaturasViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     Log.i("EDIT_ASIGNATURA", "Modificación exitosa. Recargando lista.")
-                    cargarAsignaturas() // Recargar lista al tener éxito
+                    cargarAsignaturas()
                 } else {
                     val errorBody = response.errorBody()?.string() ?: "N/A"
                     val mensaje = "Error al editar asignatura: Código ${response.code()}. Cuerpo de error: $errorBody"
@@ -85,7 +85,7 @@ class FragmentoAsignaturasViewModel : ViewModel() {
     fun eliminarAsignatura(id: Int) {
         viewModelScope.launch {
             try {
-                // Asumiendo que HowartsNetwork.retrofit tiene un método eliminarAsignatura(id)
+
                 val exito = retrofit.asignaturasRetrofit.eliminarAsignatura(id)
                 if (exito) {
                     cargarAsignaturas() // Recargar lista al tener éxito

@@ -24,7 +24,6 @@ class AdminActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        // Configurar Drawer con icono hamburguesa
         val toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -35,12 +34,10 @@ class AdminActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Configurar NavController
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
 
-        // Botones de la pantalla principal
         binding.btnUsuarios.setOnClickListener {
             navController.navigate(R.id.fragmentoUsuarios3)
         }
@@ -59,7 +56,6 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Manejo del menú del Drawer
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_usuarios -> navController.navigate(R.id.fragmentoUsuarios3)

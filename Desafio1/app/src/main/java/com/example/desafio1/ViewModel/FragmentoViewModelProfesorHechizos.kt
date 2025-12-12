@@ -18,7 +18,6 @@ class FragmentoViewModelProfesorHechizos : ViewModel() {
     val hechizos: LiveData<List<Hechizo>> = _hechizos
 
     private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error

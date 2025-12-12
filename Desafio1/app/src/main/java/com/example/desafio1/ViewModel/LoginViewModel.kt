@@ -15,7 +15,6 @@ class LoginViewModel() : ViewModel() {
 
     val usuarioLogueado = MutableLiveData<UsuarioConRoles?>()
 
-    // LiveData para manejar errores
     val error = MutableLiveData<String?>()
 
     val listaAsignaturas = MutableLiveData<List<Asignatura>?>()
