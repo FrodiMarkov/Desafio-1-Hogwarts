@@ -1,6 +1,7 @@
 package com.example.desafio1
 
 import Api.retrofit
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -121,6 +122,9 @@ class CrearAsignaturaActivity : AppCompatActivity() {
             }
         }
         binding.chipGroupAlumnos.addView(identificador)
+        binding.btnVolver.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     private fun guardarAsignatura() {

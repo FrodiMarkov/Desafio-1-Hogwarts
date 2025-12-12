@@ -2,6 +2,7 @@ package Api
 
 import com.example.clienteapi_serverktor_25_26.Api.Parametros
 import com.example.desafio1.API.asignaturasAPI
+import com.example.desafio1.API.casaAPI
 import com.example.desafio1.API.hechizosAPI
 import com.example.desafio1.API.usuariosAPI
 import retrofit2.Retrofit
@@ -28,5 +29,12 @@ object retrofit {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(hechizosAPI::class.java)
+    }
+    val casaRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(Parametros.url + ":" + Parametros.puerto)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(casaAPI::class.java)
     }
 }

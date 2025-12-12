@@ -1,5 +1,6 @@
 package com.example.desafio1
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -27,6 +28,9 @@ class RegistroActivity : AppCompatActivity() {
 
         binding.btRegistrar.setOnClickListener {
             registrar()
+        }
+        binding.btnVolver3.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 

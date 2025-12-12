@@ -1,4 +1,4 @@
-package com.example.desafio1.Adapters // Ajusta el paquete si es necesario
+package com.example.desafio1.Adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

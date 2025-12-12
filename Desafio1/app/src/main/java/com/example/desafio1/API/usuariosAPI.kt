@@ -9,7 +9,6 @@ interface usuariosAPI {
     @GET("usuario")
     suspend fun listarUsuariosConRoles(): List<UsuarioConRoles>
 
-
     @POST("usuario/registrar")
     suspend fun registrarUsuario(@Body request: Registro): Response<Registro>
 

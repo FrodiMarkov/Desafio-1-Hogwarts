@@ -8,30 +8,6 @@
     tools:context=".DumbledorActivity"
     android:background="@color/black">
 
-    <Button
-        android:id="@+id/btProfesor"
-        android:layout_width="321dp"
-        android:layout_height="52dp"
-        android:text="Profesor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.388"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
-
-    <Button
-        android:id="@+id/btAdmin"
-        android:layout_width="325dp"
-        android:layout_height="58dp"
-        android:text="Admin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.306" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
@@ -46,10 +22,96 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="4"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btAdmin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/btAdmin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Admin"
+        app:layout_constraintBottom_toTopOf="@+id/btProfesor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btProfesor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"
+        android:text="Profesor"
+        app:layout_constraintBottom_toTopOf="@+id/btAlumno"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btAdmin" />
+
+    <Button
+        android:id="@+id/btAlumno"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"
+        android:text="Alumno"
+        app:layout_constraintBottom_toTopOf="@+id/llFuncionesComunes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btProfesor" />
+
+    <LinearLayout
+        android:id="@+id/llFuncionesComunes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btAlumno">
+
+        <Button
+            android:id="@+id/btVerPerfil"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver Perfil"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btVerRanking"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver Ranking de Casas"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btConfiguracionCuenta"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Configuración de Cuenta"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btBack"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="24dp"
+        android:text="Volver / Cerrar Sesión"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llFuncionesComunes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

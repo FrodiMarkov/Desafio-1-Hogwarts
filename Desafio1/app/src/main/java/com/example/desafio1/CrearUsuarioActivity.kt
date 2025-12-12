@@ -1,6 +1,7 @@
 package com.example.desafio1
 
 import Api.retrofit.usuariosRetrofit
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -67,6 +68,9 @@ class CrearUsuarioActivity : AppCompatActivity() {
                     Toast.makeText(this@CrearUsuarioActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        binding.btnVolver2.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }

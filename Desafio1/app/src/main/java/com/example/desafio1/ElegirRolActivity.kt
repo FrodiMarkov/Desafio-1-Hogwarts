@@ -54,6 +54,9 @@ class ElegirRolActivity : AppCompatActivity() {
             startActivity(Intent(this, AdminActivity::class.java))
             finish()
         }
+        binding.btnVolver.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
 
@@ -74,7 +77,6 @@ class ElegirRolActivity : AppCompatActivity() {
 
     private fun navegarAProfesorActivity(asignatura: Asignatura) {
         var intent: Intent? = null
-
         when (asignatura.nombre) {
             "Hechizos" -> {
                 intent = Intent(this, ProfesorHechizos::class.java)
@@ -85,9 +87,7 @@ class ElegirRolActivity : AppCompatActivity() {
                 return
             }
         }
-
         ProfesorHolder.profesor = UsuarioHolder.usuario
-
         startActivity(intent)
         finish()
     }

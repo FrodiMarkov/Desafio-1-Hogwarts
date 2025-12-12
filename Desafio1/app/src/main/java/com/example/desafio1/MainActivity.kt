@@ -1,6 +1,6 @@
 package com.example.desafio1
 
-import ViewModel.LoginViewModel
+import com.example.desafio1.ViewModel.LoginViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
                     roles.contains(1) -> {
                         startActivity(Intent(this, AlumnoActivity::class.java))
+                        UsuarioHolder.usuario = it
                         finish()
                     }
                     // ----------------------------------------------------
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d("Navegacion", "ProfesorHolder llenado con ID: ${ProfesorHolder.profesor?.id}")
 
                         startActivity(Intent(this, ProfesorActivity::class.java))
+                        UsuarioHolder.usuario = it
                         finish()
                     }
 

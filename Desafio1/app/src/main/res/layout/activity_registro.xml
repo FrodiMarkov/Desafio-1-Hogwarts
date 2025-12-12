@@ -9,6 +9,15 @@
     android:padding="24dp"
     tools:context=".RegistroActivity">
 
+    <Button
+        android:id="@+id/btnVolver3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Volver"
+        tools:layout_editor_absoluteX="125dp"
+        tools:layout_editor_absoluteY="620dp" />
+
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="0dp"

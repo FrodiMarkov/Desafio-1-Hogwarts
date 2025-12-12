@@ -13,7 +13,6 @@ object hechizosDAOImp : HechizosDAO {
     // --- CREATE ---
     override fun insertar(hechizo: Hechizo): Int? {
         val connection: Connection? = Database.getConnection()
-        // CONSULTA INSERT EN UNA LÍNEA
         val sql = "INSERT INTO $TABLE_NAME (nombre, descripcion, experiencia, url_icono) VALUES (?, ?, ?, ?)"
 
         return connection?.use { conn ->
@@ -35,23 +34,21 @@ object hechizosDAOImp : HechizosDAO {
         }
     }
 
-    // --- READ (Todos) ---
     override fun listarTodos(): List<Hechizo> {
         val connection: Connection? = Database.getConnection()
         val hechizos = mutableListOf<Hechizo>()
-        val sql = "SELECT * FROM $TABLE_NAME" // Especificar columnas es buena práctica
+        val sql = "SELECT * FROM $TABLE_NAME"
 
         connection?.use { conn ->
             conn.createStatement().use { stmt ->
                 stmt.executeQuery(sql).use { rs ->
                     while (rs.next()) {
-                        // Mapeo directo de ResultSet a Hechizo
                         val hechizo = Hechizo(
                             id = rs.getInt("id"),
                             nombre = rs.getString("nombre"),
                             descripcion = rs.getString("descripcion"),
                             experiencia = rs.getInt("experiencia"),
-                            urlIcono = rs.getString("url_icono") // Asegúrate de que coincida con el nombre de la columna DB
+                            urlIcono = rs.getString("url_icono")
                         )
                         hechizos.add(hechizo)
                     }
@@ -61,19 +58,15 @@ object hechizosDAOImp : HechizosDAO {
         return hechizos
     }
 
-    // --- READ (Por ID) ---
     override fun obtenerPorId(id: Int): Hechizo? {
         val connection: Connection? = Database.getConnection()
-        // Especificar las columnas es buena práctica, aunque SELECT * también funcionaría
-        val sql = "SELECT id, nombre, descripcion, experiencia, url_icono FROM $TABLE_NAME WHERE id = ?"
+        val sql = "SELECT * FROM $TABLE_NAME WHERE id = ?"
 
         return connection?.use { conn ->
             conn.prepareStatement(sql).use { stmt ->
                 stmt.setInt(1, id)
                 stmt.executeQuery().use { rs ->
-                    // Si rs.next() es verdadero, significa que se encontró una fila
                     if (rs.next()) {
-                        // Mapeo directo de ResultSet a Hechizo
                         return Hechizo(
                             id = rs.getInt("id"),
                             nombre = rs.getString("nombre"),
@@ -82,13 +75,12 @@ object hechizosDAOImp : HechizosDAO {
                             urlIcono = rs.getString("url_icono")
                         )
                     }
-                    return null // Devuelve null si no se encontró ninguna fila
+                    return null
                 }
             }
         }
     }
 
-    // --- UPDATE ---
     override fun actualizar(hechizo: Hechizo): Boolean {
         val connection: Connection? = Database.getConnection()
         // CONSULTA UPDATE EN UNA LÍNEA
@@ -110,7 +102,6 @@ object hechizosDAOImp : HechizosDAO {
     // --- DELETE ---
     override fun eliminar(id: Int): Boolean {
         val connection: Connection? = Database.getConnection()
-        // CONSULTA DELETE EN UNA LÍNEA
         val sql = "DELETE FROM $TABLE_NAME WHERE id = ?"
 
         return connection?.use { conn ->
