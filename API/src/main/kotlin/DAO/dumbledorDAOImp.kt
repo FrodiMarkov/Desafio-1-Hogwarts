@@ -23,12 +23,8 @@ object dumbledorDAOImp : DumbledorDAO{
             casaCounts[rs.getInt("id_casa")] = rs.getInt("cantidad")
         }
 
-        // Asegurar que todas las casas existan aunque no tengan alumnos
         casas.forEach { casaCounts.putIfAbsent(it, 0) }
 
-        // Seleccionar casa equilibrada basada en:
-        // 1. casa con menos alumnos
-        // 2. mejor preferencia del usuario
         val casaElegida = casas.sortedWith(
             compareBy<Int> { casaCounts[it] }
                 .thenBy { preferencias[it] ?: 4 }
@@ -38,18 +34,17 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun insertar(usuario: Usuario): Int? {
-        val connection = Database.getConnection() ?: return null
+        val connection = Database.getConnection() 
 
         val sql = "INSERT INTO usuario (nombre, email, contraseña, id_casa, experiencia, nivel) VALUES (?, ?, ?, ?, ?, ?)"
 
-        // IMPORTANTE: solicitar keys generadas
         val ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ps.setString(1, usuario.nombre)
         ps.setString(2, usuario.email)
-        ps.setString(3, usuario.contrasena) // o usuario.password según tu modelo
+        ps.setString(3, usuario.contrasena)
         ps.setInt(4, usuario.idCasa)
-        ps.setInt(5, 0)  // experiencia inicial
-        ps.setInt(6, 1)  // nivel inicial
+        ps.setInt(5, 0)
+        ps.setInt(6, 1)
 
         val rows = ps.executeUpdate()
         if (rows > 0) {
@@ -249,7 +244,6 @@ object dumbledorDAOImp : DumbledorDAO{
     }
 
     override fun modificarAsignatura(id: Int, nombre: String, idProfesor: Int): Boolean {
-        // 1. Sentencia para actualizar el nombre de la asignatura
         val sqlUpdateAsignatura = "UPDATE asignatura SET nombre = ? WHERE id = ?"
 
         val sqlInsertProfesor = "INSERT INTO profesor_asignatura (asignatura_id, id_profesor) VALUES (?, ?)"
